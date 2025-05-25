@@ -28,12 +28,33 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "Form1";
+            buttonNewDelivery = new Button();
+            SuspendLayout();
+            // 
+            // buttonNewDelivery
+            // 
+            buttonNewDelivery.Dock = DockStyle.Top;
+            buttonNewDelivery.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            buttonNewDelivery.Location = new Point(0, 0);
+            buttonNewDelivery.Name = "buttonNewDelivery";
+            buttonNewDelivery.Size = new Size(800, 54);
+            buttonNewDelivery.TabIndex = 0;
+            buttonNewDelivery.Text = "Оформить заказ";
+            buttonNewDelivery.UseVisualStyleBackColor = true;
+            // 
+            // Form1
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(800, 450);
+            Controls.Add(buttonNewDelivery);
+            Name = "Form1";
+            Text = "Form1";
+            ResumeLayout(false);
         }
 
         #endregion
+
+        private Button buttonNewDelivery;
     }
 }
