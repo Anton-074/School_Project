@@ -13,5 +13,5 @@ public partial class SchoolRole
 
     public virtual Role Role { get; set; } = null!;
 
-    public virtual School School { get; set; } = null!;
+    public virtual Schools School { get; set; } = null!;
 }

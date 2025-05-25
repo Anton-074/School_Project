@@ -19,7 +19,7 @@ public partial class Delivery
 
     public virtual ICollection<Price> Prices { get; set; } = new List<Price>();
 
-    public virtual School School { get; set; } = null!;
+    public virtual Schools School { get; set; } = null!;
 
     public virtual Supplier Supplier { get; set; } = null!;
 }

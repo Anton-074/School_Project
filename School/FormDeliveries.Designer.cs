@@ -28,7 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             buttonNewDelivery = new Button();
+            contextMenuStrip = new ContextMenuStrip(components);
             SuspendLayout();
             // 
             // buttonNewDelivery
@@ -41,6 +43,12 @@
             buttonNewDelivery.TabIndex = 0;
             buttonNewDelivery.Text = "Оформить заказ";
             buttonNewDelivery.UseVisualStyleBackColor = true;
+            buttonNewDelivery.Click += buttonNewDelivery_Click;
+            // 
+            // contextMenuStrip
+            // 
+            contextMenuStrip.Name = "contextMenuStrip";
+            contextMenuStrip.Size = new Size(181, 26);
             // 
             // FormDelivery
             // 
@@ -57,5 +65,6 @@
         #endregion
 
         private Button buttonNewDelivery;
+        private ContextMenuStrip contextMenuStrip;
     }
 }

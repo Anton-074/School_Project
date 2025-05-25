@@ -29,7 +29,7 @@ public partial class SchollContext : DbContext
 
     public virtual DbSet<Role> Roles { get; set; }
 
-    public virtual DbSet<School> Schools { get; set; }
+    public virtual DbSet<Schools> Schools { get; set; }
 
     public virtual DbSet<SchoolRole> SchoolRoles { get; set; }
 
@@ -190,7 +190,7 @@ public partial class SchollContext : DbContext
                 .HasColumnName("role_name");
         });
 
-        modelBuilder.Entity<School>(entity =>
+        modelBuilder.Entity<Schools>(entity =>
         {
             entity.HasKey(e => e.SchoolId).HasName("schools_pkey");
 

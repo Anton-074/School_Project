@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace School.Models;
 
-public partial class School
+public partial class Schools
 {
     public int SchoolId { get; set; }
 
