@@ -1,6 +1,6 @@
 ﻿namespace School
 {
-    partial class Form1
+    partial class FormDelivery
     {
         /// <summary>
         ///  Required designer variable.
@@ -42,14 +42,15 @@
             buttonNewDelivery.Text = "Оформить заказ";
             buttonNewDelivery.UseVisualStyleBackColor = true;
             // 
-            // Form1
+            // FormDelivery
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
             Controls.Add(buttonNewDelivery);
-            Name = "Form1";
-            Text = "Form1";
+            Name = "FormDelivery";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Заказы";
             ResumeLayout(false);
         }
 

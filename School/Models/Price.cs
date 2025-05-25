@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace School;
+namespace School.Models;
 
 public partial class Price
 {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace School;
+namespace School.Models;
 
 public partial class SchollContext : DbContext
 {
