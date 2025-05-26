@@ -11,16 +11,7 @@ namespace School
         {
             InitializeComponent();
             GeneratePanel();
-            contextMenuStrip = new ContextMenuStrip();
-            ToolStripMenuItem menuEdit = new ToolStripMenuItem("Редактировать заказ");
-            ToolStripMenuItem menuShowSupplier = new ToolStripMenuItem("Подробнее о поставщике");
-            ToolStripMenuItem menuShowAssembly = new ToolStripMenuItem("Подробнее о сборке");
-            menuEdit.Click += MenuEdit_Click; // Подписка на событие клика
-            menuShowSupplier.Click += MenuShowSupplier_Click;
-            menuShowAssembly.Click += MenuShowAssembly_Click;
-            contextMenuStrip.Items.Add(menuEdit);
-            contextMenuStrip.Items.Add(menuShowSupplier);
-            contextMenuStrip.Items.Add(menuShowAssembly);
+            
         }
         protected override void OnLoad(EventArgs e)
         {
@@ -44,42 +35,61 @@ namespace School
                 var typeSupply = this.db.TypeSuppliers.Where(w => w.TypeSupplierId == supplier.TypeSupplierId).FirstOrDefault();
                 var schoolNumber = this.db.Schools.Where(w=>w.SchoolId == del.SchoolId).FirstOrDefault();
                 var assemb = this.db.Assemblies.Where(w => w.AssemblyId == del.AssemblyId).FirstOrDefault();
+                var statuse = this.db.Statuses.Where(w=>w.StatusId == del.StatusId).FirstOrDefault();
 
                 Panel supplierPanel = new Panel
                 {
-                    Size = new System.Drawing.Size(770, 100),
+                    Size = new System.Drawing.Size(770, 140),
                     Location = new System.Drawing.Point(15, yOffset),
                     BorderStyle = BorderStyle.FixedSingle,
-                    Tag = $"{del.DeliveryId},{supplier.SupplierId},{assemb.AssemblyId},{schoolNumber.SchoolId}"
+                    Tag = $"{del.DeliveryId},{supplier.SupplierId},{assemb.AssemblyId},{schoolNumber.SchoolId},{statuse.StatusId}"
                 };
-
+                Panel rightPanel = new Panel
+                {
+                    Size = new System.Drawing.Size(250, 140),
+                    Dock = DockStyle.Right,
+                    BorderStyle = BorderStyle.FixedSingle
+                };
                 supplierPanel.MouseDown += panelLabel_MouseDown;
                 //supplierPanel.MouseDown += panelLabel_MouseDown;
                 Label supplierLabel = new Label
                 {
                     AutoSize = false,
-                    Size = new System.Drawing.Size(200, 80),
-                    Dock = DockStyle.Right,
+                    Size = new System.Drawing.Size(250, 30),
+                    Dock = DockStyle.Bottom,
                     Text = $" Поставщик: {typeSupply.TypeSupplierName} {supplier.SupplierName}",
-                    TextAlign = ContentAlignment.BottomRight,
-                    BorderStyle = BorderStyle.FixedSingle
+                    TextAlign = ContentAlignment.BottomRight
                 };
                 supplierLabel.Font = new Font("Arial", 12, FontStyle.Regular);
+
+                Label statuseLabel = new Label
+                {
+                    AutoSize = false,
+                    Size = new System.Drawing.Size(250, 30),
+                    Dock = DockStyle.Top,
+                    Text = $" Статус:{statuse.StatusName}",
+                    TextAlign = ContentAlignment.BottomRight
+                };
+                statuseLabel.Font = new Font("Arial", 12, FontStyle.Regular);
+
                 Label assemblyLabel = new Label
                 {
                     AutoSize = false,
                     Dock = DockStyle.Left,
-                    Size = new System.Drawing.Size(200, 80),
+                    Size = new System.Drawing.Size(250, 140),
                     TextAlign = ContentAlignment.MiddleLeft,
                     BorderStyle = BorderStyle.FixedSingle,
                     Text = $"Заказ: \nКомпьютер\nСерийный номер {del.AssemblyId}\n{schoolNumber.SchoolName}\n{del.DeliveryDate}"
                 };
                 assemblyLabel.Font = new Font("Arial", 12, FontStyle.Regular);
+
                 supplierPanel.Controls.Add(assemblyLabel);
-                supplierPanel.Controls.Add(supplierLabel);
-                
+                rightPanel.Controls.Add(supplierLabel);
+                rightPanel.Controls.Add(statuseLabel);
+                supplierPanel.Controls.Add(rightPanel);
+
                 this.Controls.Add(supplierPanel);
-                yOffset += supplierLabel.Height + 30;
+                yOffset += supplierPanel.Height + 30;
             }
         }
         private void buttonNewDelivery_Click(object sender, EventArgs e)
@@ -152,7 +162,7 @@ namespace School
             formDel.Show();
         }
 
-        private void panelLabel_MouseDown(object sender, MouseEventArgs e)
+        public void panelLabel_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
             {
@@ -164,7 +174,7 @@ namespace School
                 }
             }
         }
-        private void MenuEdit_Click(object sender, EventArgs e)
+        public void MenuEdit_Click(object sender, EventArgs e)
         {
             Panel clickedPanel = contextMenuStrip.Tag as Panel; // Получаем панель из Tag
             if (clickedPanel != null)
@@ -285,13 +295,76 @@ namespace School
                 formDel.Show();
             }
         }
-        private void MenuShowSupplier_Click(object sender, EventArgs e)
+        public void MenuShowSupplier_Click(object sender, EventArgs e)
         {
 
         }
-        private void MenuShowAssembly_Click(object sender, EventArgs e)
+        public void MenuShowAssembly_Click(object sender, EventArgs e)
         {
 
+        }
+        public void MenuEditStatuse_Click(object sender, EventArgs e)
+        {
+            Panel clickedPanel = contextMenuStrip.Tag as Panel; // Получаем панель из Tag
+            if (clickedPanel != null)
+            {
+                int index = -1;
+
+                
+                int count = 0;
+
+                int indexStatuse = -1;
+
+                var del = this.db.Deliveries.OrderBy(o => o.DeliveryDate).ToList();
+                var stat = db.Statuses.OrderBy(o=>o.StatusId).ToList();
+
+                string splits = (string)clickedPanel.Tag;
+                string[] Ids = splits.Split(",", StringSplitOptions.RemoveEmptyEntries);
+
+                int delivaryId = Int32.Parse(Ids[0]);
+                int statusId = Int32.Parse(Ids[4]);
+
+                Delivery delivary = db.Deliveries.Find(delivaryId);
+                Status status = db.Statuses.Find(statusId);
+
+                FormEditStatuse form = new();
+
+                //Статус 
+                foreach (Status u in stat)
+                {
+                    form.comboBoxStatuse.Items.Add(u.StatusName);
+
+                    if (u.StatusName == status.StatusName)
+                    {
+                        index = count;
+                        indexStatuse = u.StatusId;
+                    }
+                    count++;
+                }
+                form.comboBoxStatuse.SelectedIndex = index;
+
+                
+                DialogResult result = form.ShowDialog(this);
+
+                if (result == DialogResult.Cancel)
+                    return;
+
+                foreach (Status u in stat)
+                {
+                    if (u.StatusName == form.comboBoxStatuse.Text)
+                    {
+                        index = u.StatusId;
+                    }
+                }
+
+                delivary.StatusId = index;
+
+                db.SaveChanges();
+
+                this.Hide();
+                FormDelivery formDel = new FormDelivery();
+                formDel.Show();
+            }
         }
 
     }

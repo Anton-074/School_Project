@@ -19,6 +19,7 @@ namespace School
         private Button loginButton;
         public LoginForm()
         {
+            this.StartPosition = FormStartPosition.CenterScreen;
             // Инициализация элементов управления
             usernameTextBox = new TextBox { Location = new System.Drawing.Point(15, 15), Width = 200 };
             passwordTextBox = new TextBox { Location = new System.Drawing.Point(15, 50), Width = 200, PasswordChar = '*' };
@@ -42,13 +43,28 @@ namespace School
                 if (role == "1")
                 {
                     FormDelivery adminForm = new FormDelivery();
+                    adminForm.contextMenuStrip = new ContextMenuStrip();
+                    ToolStripMenuItem menuEdit = new ToolStripMenuItem("Редактировать заказ");
+                    ToolStripMenuItem menuShowSupplier = new ToolStripMenuItem("Подробнее о поставщике");
+                    ToolStripMenuItem menuShowAssembly = new ToolStripMenuItem("Подробнее о сборке");
+                    menuEdit.Click += adminForm.MenuEdit_Click; // Подписка на событие клика
+                    menuShowSupplier.Click += adminForm.MenuShowSupplier_Click;
+                    menuShowAssembly.Click += adminForm.MenuShowAssembly_Click;
+                    adminForm.contextMenuStrip.Items.Add(menuEdit);
+                    adminForm.contextMenuStrip.Items.Add(menuShowSupplier);
+                    adminForm.contextMenuStrip.Items.Add(menuShowAssembly);
                     adminForm.Show();
                 }
                 else if (role == "3")
                 {
                     FormDelivery supplierForm = new FormDelivery();
                     supplierForm.buttonNewDelivery.Visible = false;
-                    supplierForm.Show();
+
+                    supplierForm.contextMenuStrip = new ContextMenuStrip();
+                    ToolStripMenuItem menuEditStatuse = new ToolStripMenuItem("Изменить статус");
+                    menuEditStatuse.Click += supplierForm.MenuEditStatuse_Click;
+                    supplierForm.contextMenuStrip.Items.Add(menuEditStatuse);
+                    supplierForm.Show();//Доделать что бы форма возвращалась
                 }
                 this.Hide(); // Скрыть форму авторизации
             }

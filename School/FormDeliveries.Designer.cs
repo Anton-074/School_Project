@@ -48,7 +48,7 @@
             // contextMenuStrip
             // 
             contextMenuStrip.Name = "contextMenuStrip";
-            contextMenuStrip.Size = new Size(61, 4);
+            contextMenuStrip.Size = new Size(181, 26);
             // 
             // FormDelivery
             // 
@@ -64,7 +64,7 @@
         }
 
         #endregion
-        private ContextMenuStrip contextMenuStrip;
         public Button buttonNewDelivery;
+        public ContextMenuStrip contextMenuStrip;
     }
 }
