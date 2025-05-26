@@ -15,11 +15,15 @@ public partial class Delivery
 
     public DateOnly DeliveryDate { get; set; }
 
-    public virtual Assembly Assembly { get; set; } = null!;
+    public int? StatusId { get; set; }
+
+    public virtual Assemblys Assembly { get; set; } = null!;
 
     public virtual ICollection<Price> Prices { get; set; } = new List<Price>();
 
     public virtual Schools School { get; set; } = null!;
+
+    public virtual Status? Status { get; set; }
 
     public virtual Supplier Supplier { get; set; } = null!;
 }

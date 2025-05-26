@@ -47,6 +47,7 @@
             // 
             // comboBoxSupply
             // 
+            comboBoxSupply.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxSupply.Font = new Font("Microsoft Sans Serif", 12F);
             comboBoxSupply.FormattingEnabled = true;
             comboBoxSupply.Location = new Point(37, 48);
@@ -123,6 +124,7 @@
             // 
             // comboBoxSchool
             // 
+            comboBoxSchool.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxSchool.Font = new Font("Microsoft Sans Serif", 12F);
             comboBoxSchool.FormattingEnabled = true;
             comboBoxSchool.Location = new Point(37, 234);
@@ -143,6 +145,7 @@
             // 
             // comboBoxAssembly
             // 
+            comboBoxAssembly.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxAssembly.Font = new Font("Microsoft Sans Serif", 12F);
             comboBoxAssembly.FormattingEnabled = true;
             comboBoxAssembly.Location = new Point(37, 139);

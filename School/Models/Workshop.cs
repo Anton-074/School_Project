@@ -11,5 +11,5 @@ public partial class Workshop
 
     public string? Location { get; set; }
 
-    public virtual ICollection<Assembly> Assemblies { get; set; } = new List<Assembly>();
+    public virtual ICollection<Assemblys> Assemblies { get; set; } = new List<Assemblys>();
 }

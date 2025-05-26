@@ -15,7 +15,7 @@ public partial class SchollContext : DbContext
     {
     }
 
-    public virtual DbSet<Assembly> Assemblies { get; set; }
+    public virtual DbSet<Assemblys> Assemblies { get; set; }
 
     public virtual DbSet<AssemblyComponent> AssemblyComponents { get; set; }
 
@@ -32,6 +32,8 @@ public partial class SchollContext : DbContext
     public virtual DbSet<Schools> Schools { get; set; }
 
     public virtual DbSet<SchoolRole> SchoolRoles { get; set; }
+
+    public virtual DbSet<Status> Statuses { get; set; }
 
     public virtual DbSet<Supplier> Suppliers { get; set; }
 
@@ -51,7 +53,7 @@ public partial class SchollContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Assembly>(entity =>
+        modelBuilder.Entity<Assemblys>(entity =>
         {
             entity.HasKey(e => e.AssemblyId).HasName("assemblies_pkey");
 
@@ -59,7 +61,12 @@ public partial class SchollContext : DbContext
 
             entity.Property(e => e.AssemblyId).HasColumnName("assembly_id");
             entity.Property(e => e.AssemblyDate).HasColumnName("assembly_date");
+            entity.Property(e => e.StatusId).HasColumnName("status_id");
             entity.Property(e => e.WorkshopId).HasColumnName("workshop_id");
+
+            entity.HasOne(d => d.Status).WithMany(p => p.Assemblies)
+                .HasForeignKey(d => d.StatusId)
+                .HasConstraintName("assemblies_status_id_fkey");
 
             entity.HasOne(d => d.Workshop).WithMany(p => p.Assemblies)
                 .HasForeignKey(d => d.WorkshopId)
@@ -137,6 +144,7 @@ public partial class SchollContext : DbContext
             entity.Property(e => e.AssemblyId).HasColumnName("assembly_id");
             entity.Property(e => e.DeliveryDate).HasColumnName("delivery_date");
             entity.Property(e => e.SchoolId).HasColumnName("school_id");
+            entity.Property(e => e.StatusId).HasColumnName("status_id");
             entity.Property(e => e.SupplierId).HasColumnName("supplier_id");
 
             entity.HasOne(d => d.Assembly).WithMany(p => p.Deliveries)
@@ -148,6 +156,10 @@ public partial class SchollContext : DbContext
                 .HasForeignKey(d => d.SchoolId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("deliveries_school_id_fkey");
+
+            entity.HasOne(d => d.Status).WithMany(p => p.Deliveries)
+                .HasForeignKey(d => d.StatusId)
+                .HasConstraintName("deliveries_status_id_fkey");
 
             entity.HasOne(d => d.Supplier).WithMany(p => p.Deliveries)
                 .HasForeignKey(d => d.SupplierId)
@@ -224,6 +236,21 @@ public partial class SchollContext : DbContext
                 .HasForeignKey(d => d.SchoolId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("school_roles_school_id_fkey");
+        });
+
+        modelBuilder.Entity<Status>(entity =>
+        {
+            entity.HasKey(e => e.StatusId).HasName("status_pkey");
+
+            entity.ToTable("status");
+
+            entity.HasIndex(e => e.StatusName, "status_status_name_key").IsUnique();
+
+            entity.Property(e => e.StatusId).HasColumnName("status_id");
+            entity.Property(e => e.Description).HasColumnName("description");
+            entity.Property(e => e.StatusName)
+                .HasMaxLength(100)
+                .HasColumnName("status_name");
         });
 
         modelBuilder.Entity<Supplier>(entity =>

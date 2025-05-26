@@ -13,7 +13,7 @@ public partial class AssemblyComponent
 
     public int Quantity { get; set; }
 
-    public virtual Assembly Assembly { get; set; } = null!;
+    public virtual Assemblys Assembly { get; set; } = null!;
 
     public virtual WarehouseStock WarehouseStock { get; set; } = null!;
 }

@@ -48,12 +48,13 @@
             // contextMenuStrip
             // 
             contextMenuStrip.Name = "contextMenuStrip";
-            contextMenuStrip.Size = new Size(181, 26);
+            contextMenuStrip.Size = new Size(61, 4);
             // 
             // FormDelivery
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            AutoScroll = true;
             ClientSize = new Size(800, 450);
             Controls.Add(buttonNewDelivery);
             Name = "FormDelivery";
