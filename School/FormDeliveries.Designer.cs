@@ -64,8 +64,7 @@
         }
 
         #endregion
-
-        private Button buttonNewDelivery;
         private ContextMenuStrip contextMenuStrip;
+        public Button buttonNewDelivery;
     }
 }
