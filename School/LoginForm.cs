@@ -38,7 +38,7 @@ namespace School
             string role = AuthenticateUser(username, password);
             if (role != null)
             {
-                MessageBox.Show("Авторизация успешна!");
+                //MessageBox.Show("Авторизация успешна!");
                 // Открытие соответствующей формы в зависимости от роли
                 if (role == "1")
                 {

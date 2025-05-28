@@ -11,7 +11,7 @@ namespace School
         {
             InitializeComponent();
             GeneratePanel();
-            
+
         }
         protected override void OnLoad(EventArgs e)
         {
@@ -28,14 +28,14 @@ namespace School
 
             var deliveries = db.Deliveries.OrderBy(o => o.DeliveryDate).ToList();
 
-            int yOffset = 70;
+            int yOffset = 100;
             foreach (Delivery del in deliveries)
             {
-                var supplier = this.db.Suppliers.Where(w=>w.SupplierId == del.SupplierId).FirstOrDefault();
+                var supplier = this.db.Suppliers.Where(w => w.SupplierId == del.SupplierId).FirstOrDefault();
                 var typeSupply = this.db.TypeSuppliers.Where(w => w.TypeSupplierId == supplier.TypeSupplierId).FirstOrDefault();
-                var schoolNumber = this.db.Schools.Where(w=>w.SchoolId == del.SchoolId).FirstOrDefault();
+                var schoolNumber = this.db.Schools.Where(w => w.SchoolId == del.SchoolId).FirstOrDefault();
                 var assemb = this.db.Assemblies.Where(w => w.AssemblyId == del.AssemblyId).FirstOrDefault();
-                var statuse = this.db.Statuses.Where(w=>w.StatusId == del.StatusId).FirstOrDefault();
+                var statuse = this.db.Statuses.Where(w => w.StatusId == del.StatusId).FirstOrDefault();
 
                 Panel supplierPanel = new Panel
                 {
@@ -48,7 +48,7 @@ namespace School
                 {
                     Size = new System.Drawing.Size(250, 140),
                     Dock = DockStyle.Right,
-                    BorderStyle = BorderStyle.FixedSingle
+                    //BorderStyle = BorderStyle.FixedSingle
                 };
                 supplierPanel.MouseDown += panelLabel_MouseDown;
                 //supplierPanel.MouseDown += panelLabel_MouseDown;
@@ -78,7 +78,7 @@ namespace School
                     Dock = DockStyle.Left,
                     Size = new System.Drawing.Size(250, 140),
                     TextAlign = ContentAlignment.MiddleLeft,
-                    BorderStyle = BorderStyle.FixedSingle,
+                    //BorderStyle = BorderStyle.FixedSingle,
                     Text = $"Заказ: \nКомпьютер\nСерийный номер {del.AssemblyId}\n{schoolNumber.SchoolName}\n{del.DeliveryDate}"
                 };
                 assemblyLabel.Font = new Font("Arial", 12, FontStyle.Regular);
@@ -101,22 +101,22 @@ namespace School
             int indexSchool = -1;
 
 
-            var supply = this.db.Suppliers.OrderBy(o=>o.SupplierName).ToList();
-            var assemb = this.db.Assemblies.OrderBy(o=>o.AssemblyId).ToList();
+            var supply = this.db.Suppliers.OrderBy(o => o.SupplierName).ToList();
+            var assemb = this.db.Assemblies.OrderBy(o => o.AssemblyId).ToList();
             var school = this.db.Schools.OrderBy(o => o.SchoolName).ToList();
 
-            
+
 
             foreach (Supplier u in supply)
             {
                 form.comboBoxSupply.Items.Add(u.SupplierName);
             }
-            foreach(Assemblys u in assemb)
+            foreach (Assemblys u in assemb)
             {
                 form.comboBoxAssembly.Items.Add(u.AssemblyId);
             }
 
-            foreach(Schools u in school)
+            foreach (Schools u in school)
             {
                 form.comboBoxSchool.Items.Add(u.SchoolName);
             }
@@ -143,7 +143,7 @@ namespace School
             {
                 if (u.SchoolName == form.comboBoxSchool.Text)
                 {
-                    indexSchool= u.SchoolId;
+                    indexSchool = u.SchoolId;
                 }
             }
 
@@ -189,7 +189,7 @@ namespace School
                 int indexAssembly = -1;
                 int indexSchool = -1;
 
-                var del = this.db.Deliveries.OrderBy(o=>o.DeliveryDate).ToList();
+                var del = this.db.Deliveries.OrderBy(o => o.DeliveryDate).ToList();
                 var supply = this.db.Suppliers.OrderBy(o => o.SupplierName).ToList();
                 var assemb = this.db.Assemblies.OrderBy(o => o.AssemblyId).ToList();
                 var school = this.db.Schools.OrderBy(o => o.SchoolName).ToList();
@@ -200,7 +200,7 @@ namespace School
                 string[] Ids = splits.Split(",", StringSplitOptions.RemoveEmptyEntries);
 
                 int delivaryId = Int32.Parse(Ids[0]);
-                int supplierId  = Int32.Parse(Ids[1]);
+                int supplierId = Int32.Parse(Ids[1]);
                 int assemblyId = Int32.Parse(Ids[2]);
                 int schoolId = Int32.Parse(Ids[3]);
 
@@ -208,7 +208,7 @@ namespace School
                 Delivery delivary = db.Deliveries.Find(delivaryId);
                 Supplier supplier = db.Suppliers.Find(supplierId);
                 Assemblys assembly = db.Assemblies.Find(assemblyId);
-                Schools schools =   db.Schools.Find(schoolId);
+                Schools schools = db.Schools.Find(schoolId);
 
 
 
@@ -287,7 +287,7 @@ namespace School
                 delivary.SupplierId = indexSupply;
                 delivary.AssemblyId = indexAssembly;
                 delivary.SchoolId = indexSchool;
-                
+
                 db.SaveChanges();
 
                 this.Hide();
@@ -297,7 +297,17 @@ namespace School
         }
         public void MenuShowSupplier_Click(object sender, EventArgs e)
         {
+            Panel clickedPanel = contextMenuStrip.Tag as Panel; // Получаем панель из Tag
+            if (clickedPanel != null)
+            {
+                string splits = (string)clickedPanel.Tag;
+                string[] Ids = splits.Split(",", StringSplitOptions.RemoveEmptyEntries);
 
+                int supplierId = Int32.Parse(Ids[1]);
+
+                FormSupplier supplier = new FormSupplier(supplierId);
+                supplier.Show();
+            }
         }
         public void MenuShowAssembly_Click(object sender, EventArgs e)
         {
@@ -310,13 +320,13 @@ namespace School
             {
                 int index = -1;
 
-                
+
                 int count = 0;
 
                 int indexStatuse = -1;
 
                 var del = this.db.Deliveries.OrderBy(o => o.DeliveryDate).ToList();
-                var stat = db.Statuses.OrderBy(o=>o.StatusId).ToList();
+                var stat = db.Statuses.OrderBy(o => o.StatusId).ToList();
 
                 string splits = (string)clickedPanel.Tag;
                 string[] Ids = splits.Split(",", StringSplitOptions.RemoveEmptyEntries);
@@ -343,7 +353,7 @@ namespace School
                 }
                 form.comboBoxStatuse.SelectedIndex = index;
 
-                
+
                 DialogResult result = form.ShowDialog(this);
 
                 if (result == DialogResult.Cancel)
@@ -367,5 +377,11 @@ namespace School
             }
         }
 
+        private void buttonExit_Click(object sender, EventArgs e)
+        {
+            this.Close();
+            LoginForm loginForm = new LoginForm();
+            loginForm.Show();
+        }
     }
 }

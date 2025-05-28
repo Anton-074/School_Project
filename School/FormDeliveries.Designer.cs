@@ -31,15 +31,17 @@
             components = new System.ComponentModel.Container();
             buttonNewDelivery = new Button();
             contextMenuStrip = new ContextMenuStrip(components);
+            flowLayoutPanelTop = new FlowLayoutPanel();
+            buttonExit = new Button();
+            flowLayoutPanelTop.SuspendLayout();
             SuspendLayout();
             // 
             // buttonNewDelivery
             // 
-            buttonNewDelivery.Dock = DockStyle.Top;
             buttonNewDelivery.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            buttonNewDelivery.Location = new Point(0, 0);
+            buttonNewDelivery.Location = new Point(13, 13);
             buttonNewDelivery.Name = "buttonNewDelivery";
-            buttonNewDelivery.Size = new Size(800, 54);
+            buttonNewDelivery.Size = new Size(585, 75);
             buttonNewDelivery.TabIndex = 0;
             buttonNewDelivery.Text = "Оформить заказ";
             buttonNewDelivery.UseVisualStyleBackColor = true;
@@ -48,7 +50,29 @@
             // contextMenuStrip
             // 
             contextMenuStrip.Name = "contextMenuStrip";
-            contextMenuStrip.Size = new Size(181, 26);
+            contextMenuStrip.Size = new Size(61, 4);
+            // 
+            // flowLayoutPanelTop
+            // 
+            flowLayoutPanelTop.Controls.Add(buttonNewDelivery);
+            flowLayoutPanelTop.Controls.Add(buttonExit);
+            flowLayoutPanelTop.Dock = DockStyle.Top;
+            flowLayoutPanelTop.Location = new Point(0, 0);
+            flowLayoutPanelTop.Name = "flowLayoutPanelTop";
+            flowLayoutPanelTop.Padding = new Padding(10);
+            flowLayoutPanelTop.Size = new Size(800, 100);
+            flowLayoutPanelTop.TabIndex = 2;
+            // 
+            // buttonExit
+            // 
+            buttonExit.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            buttonExit.Location = new Point(604, 13);
+            buttonExit.Name = "buttonExit";
+            buttonExit.Size = new Size(167, 75);
+            buttonExit.TabIndex = 3;
+            buttonExit.Text = "Выход из аккаунта";
+            buttonExit.UseVisualStyleBackColor = true;
+            buttonExit.Click += buttonExit_Click;
             // 
             // FormDelivery
             // 
@@ -56,15 +80,19 @@
             AutoScaleMode = AutoScaleMode.Font;
             AutoScroll = true;
             ClientSize = new Size(800, 450);
-            Controls.Add(buttonNewDelivery);
+            Controls.Add(flowLayoutPanelTop);
             Name = "FormDelivery";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Заказы";
+            flowLayoutPanelTop.ResumeLayout(false);
             ResumeLayout(false);
         }
 
         #endregion
         public Button buttonNewDelivery;
         public ContextMenuStrip contextMenuStrip;
+        private Panel panelTop;
+        private FlowLayoutPanel flowLayoutPanelTop;
+        private Button buttonExit;
     }
 }
