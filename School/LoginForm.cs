@@ -14,12 +14,19 @@ namespace School
 {
     public partial class LoginForm : Form
     {
+        /*private TextBox usernameTextBox;
+        private TextBox passwordTextBox;
+        private Button loginButton;*/
+
+        private Label titleLabel;
+        private Label usernameLabel;
+        private Label passwordLabel;
         private TextBox usernameTextBox;
         private TextBox passwordTextBox;
         private Button loginButton;
         public LoginForm()
         {
-            this.StartPosition = FormStartPosition.CenterScreen;
+            /*this.StartPosition = FormStartPosition.CenterScreen;
             // Инициализация элементов управления
             usernameTextBox = new TextBox { Location = new System.Drawing.Point(15, 15), Width = 200 };
             passwordTextBox = new TextBox { Location = new System.Drawing.Point(15, 50), Width = 200, PasswordChar = '*' };
@@ -29,7 +36,73 @@ namespace School
             // Добавление элементов на форму
             Controls.Add(usernameTextBox);
             Controls.Add(passwordTextBox);
+            Controls.Add(loginButton);*/
+
+
+            // Настройки формы
+            this.Text = "Авторизация";
+            this.ClientSize = new Size(350, 250);
+            this.FormBorderStyle = FormBorderStyle.FixedDialog;
+            this.StartPosition = FormStartPosition.CenterScreen;
+            this.BackColor = Color.FromArgb(40, 45, 60);
+            this.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
+            // Заголовок
+            titleLabel = new Label();
+            titleLabel.Text = "Вход в систему";
+            titleLabel.ForeColor = Color.White;
+            titleLabel.Font = new Font("Segoe UI Semibold", 18F, FontStyle.Bold);
+            titleLabel.AutoSize = true;
+            titleLabel.Location = new Point((this.ClientSize.Width - titleLabel.Width) / 2, 20);
+            titleLabel.TextAlign = ContentAlignment.MiddleCenter;
+            // Метка "Имя пользователя"
+            usernameLabel = new Label();
+            usernameLabel.Text = "Имя пользователя:";
+            usernameLabel.ForeColor = Color.WhiteSmoke;
+            usernameLabel.AutoSize = true;
+            usernameLabel.Location = new Point(40, 70);
+            // Текстбокс для имени пользователя
+            usernameTextBox = new TextBox();
+            usernameTextBox.Location = new Point(40, 95);
+            usernameTextBox.Width = 270;
+            usernameTextBox.Font = new Font("Segoe UI", 12F, FontStyle.Regular);
+            usernameTextBox.ForeColor = Color.FromArgb(30, 30, 30);
+
+            // Метка "Пароль"
+            passwordLabel = new Label();
+            passwordLabel.Text = "Пароль:";
+            passwordLabel.ForeColor = Color.WhiteSmoke;
+            passwordLabel.AutoSize = true;
+            passwordLabel.Location = new Point(40, 135);
+            // Текстбокс для пароля
+            passwordTextBox = new TextBox();
+            passwordTextBox.Location = new Point(40, 160);
+            passwordTextBox.Width = 270;
+            passwordTextBox.Font = new Font("Segoe UI", 12F, FontStyle.Regular);
+            passwordTextBox.ForeColor = Color.FromArgb(30, 30, 30);
+            passwordTextBox.PasswordChar = '●';
+            // Кнопка "Войти"
+            loginButton = new Button();
+            loginButton.Text = "Войти";
+            loginButton.Location = new Point(40, 200);
+            loginButton.Size = new Size(270, 40);
+            loginButton.BackColor = Color.FromArgb(0, 122, 204);
+            loginButton.ForeColor = Color.White;
+            loginButton.FlatStyle = FlatStyle.Flat;
+            loginButton.FlatAppearance.BorderSize = 0;
+            loginButton.Font = new Font("Segoe UI Semibold", 14F, FontStyle.Bold);
+            loginButton.Cursor = Cursors.Hand;
+            loginButton.Click += LoginButton_Click;
+
+            // Добавление элементов на форму
+            Controls.Add(titleLabel);
+            Controls.Add(usernameLabel);
+            Controls.Add(usernameTextBox);
+            Controls.Add(passwordLabel);
+            Controls.Add(passwordTextBox);
             Controls.Add(loginButton);
+
+            // Центрирование заголовка после добавления на форму
+            titleLabel.Left = (this.ClientSize.Width - titleLabel.Width) / 2;
         }
         private void LoginButton_Click(object sender, EventArgs e)
         {
