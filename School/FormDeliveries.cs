@@ -10,6 +10,7 @@ namespace School
         public FormDelivery()
         {
             InitializeComponent();
+            InitializeSortingControls(); // Инициализация элементов управления для сортировки
             GeneratePanel();
         }
         protected override void OnLoad(EventArgs e)
@@ -21,11 +22,24 @@ namespace School
         {
             GeneratePanel();
         }
+        private void InitializeSortingControls()
+        {
+            // Создаем ComboBox для выбора критерия сортировки
+            ComboBox comboBoxSort = new ComboBox
+            {
+                Location = new System.Drawing.Point(15, 60),
+                Width = 200
+            };
+            comboBoxSort.Items.Add("Сортировать по дате доставки");
+            comboBoxSort.Items.Add("Сортировать по имени поставщика");
+            comboBoxSort.SelectedIndexChanged += (s, e) => SortPanels(comboBoxSort.SelectedIndex);
+            flowLayoutPanelTop.Controls.Add(comboBoxSort);
+        }
         public void GeneratePanel()
         {
             this.db = new SchollContext();
 
-            var deliveries = db.Deliveries.OrderBy(o => o.DeliveryDate).ToList();
+            var deliveries = db.Deliveries.ToList();
 
             int yOffset = 100;
             foreach (Delivery del in deliveries)
@@ -108,6 +122,111 @@ namespace School
                 yOffset += supplierPanel.Height + 30;
             }
         }
+        private void GeneratePanel(List<Delivery> deliveries)
+        {
+            int yOffset = 100;
+            foreach (Delivery del in deliveries)
+            {
+                // Создание панелей и добавление их на форму (как в предыдущем примере)
+                // ...
+                var supplier = this.db.Suppliers.Where(w => w.SupplierId == del.SupplierId).FirstOrDefault();
+                var typeSupply = this.db.TypeSuppliers.Where(w => w.TypeSupplierId == supplier.TypeSupplierId).FirstOrDefault();
+                var schoolNumber = this.db.Schools.Where(w => w.SchoolId == del.SchoolId).FirstOrDefault();
+                var assemb = this.db.Assemblies.Where(w => w.AssemblyId == del.AssemblyId).FirstOrDefault();
+                var statuse = this.db.Statuses.Where(w => w.StatusId == del.StatusId).FirstOrDefault();
+
+                Panel supplierPanel = new Panel
+                {
+                    Size = new System.Drawing.Size(770, 140),
+                    Location = new System.Drawing.Point(15, yOffset),
+                    BorderStyle = BorderStyle.FixedSingle,
+                    Tag = $"{del.DeliveryId},{supplier.SupplierId},{assemb.AssemblyId},{schoolNumber.SchoolId},{statuse.StatusId}"
+                };
+                Panel rightPanel = new Panel
+                {
+                    Size = new System.Drawing.Size(250, 140),
+                    Dock = DockStyle.Right,
+                    //BorderStyle = BorderStyle.FixedSingle
+                };
+                supplierPanel.MouseDown += panelLabel_MouseDown;
+                //supplierPanel.MouseDown += panelLabel_MouseDown;
+                Label supplierLabel = new Label
+                {
+                    AutoSize = false,
+                    Size = new System.Drawing.Size(250, 30),
+                    Dock = DockStyle.Bottom,
+                    Text = $" Поставщик: {typeSupply.TypeSupplierName} {supplier.SupplierName}",
+                    TextAlign = ContentAlignment.BottomRight
+                };
+                supplierLabel.Font = new Font("Arial", 12, FontStyle.Regular);
+
+                Label statuseLabel = new Label
+                {
+                    AutoSize = false,
+                    Size = new System.Drawing.Size(250, 30),
+                    Dock = DockStyle.Top,
+                    Text = $" Статус:{statuse.StatusName}",
+                    TextAlign = ContentAlignment.BottomRight
+                };
+                statuseLabel.Font = new Font("Arial", 12, FontStyle.Regular);
+
+                Label assemblyLabel = new Label
+                {
+                    AutoSize = false,
+                    Dock = DockStyle.Left,
+                    Size = new System.Drawing.Size(250, 140),
+                    TextAlign = ContentAlignment.MiddleLeft,
+                    //BorderStyle = BorderStyle.FixedSingle,
+                    Text = $"Заказ: \nКомпьютер\nСерийный номер {del.AssemblyId}\n{schoolNumber.SchoolName}\n{del.DeliveryDate}"
+                };
+
+                //----------------
+                Button threeDotsButton = new Button
+                {
+                    Text = "...",
+                    Size = new System.Drawing.Size(30, 30),
+                    Dock = DockStyle.Right,
+                    Location = new System.Drawing.Point(supplierPanel.Width - 40, 5) // Позиция в правом верхнем углу
+                };
+                threeDotsButton.Click += (s, e) => ShowContextMenu(threeDotsButton, del);
+                threeDotsButton.Click += panelLabel_MouseDown;
+                threeDotsButton.Tag = supplierPanel;
+                //-----------------
+                assemblyLabel.Font = new Font("Arial", 12, FontStyle.Regular);
+
+                supplierPanel.Controls.Add(assemblyLabel);
+                rightPanel.Controls.Add(supplierLabel);
+                rightPanel.Controls.Add(statuseLabel);
+                //rightPanel.Controls.Add(threeDotsButton);
+                supplierPanel.Controls.Add(rightPanel);
+                //----
+
+                supplierPanel.Controls.Add(threeDotsButton); // Добавляем кнопку на панель
+                //----
+                this.Controls.Add(supplierPanel);
+                yOffset += supplierPanel.Height + 30;
+            }
+        }
+
+        private void SortPanels(int sortOption)
+        {
+            // Удаляем все панели перед сортировкой
+            this.Controls.Clear();
+            InitializeSortingControls(); // Снова добавляем элементы управления для сортировки
+            var deliveries = db.Deliveries.ToList();
+            // Сортировка по выбранному критерию
+            if (sortOption == 0) // Сортировка по дате доставки
+            {
+                deliveries = deliveries.OrderBy(o => o.DeliveryDate).ToList();
+            }
+            else if (sortOption == 1) // Сортировка по имени поставщика
+            {
+                deliveries = deliveries.OrderBy(o => this.db.Suppliers.FirstOrDefault(s => s.SupplierId == o.SupplierId).SupplierName).ToList();
+            }
+            // Генерируем панели после сортировки
+            GeneratePanel(deliveries);
+        }
+        
         private void ShowContextMenu(Control control, Delivery del)
         {
 

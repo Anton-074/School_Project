@@ -38,10 +38,11 @@
             // 
             // buttonNewDelivery
             // 
+            buttonNewDelivery.AutoSize = true;
             buttonNewDelivery.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 204);
             buttonNewDelivery.Location = new Point(13, 13);
             buttonNewDelivery.Name = "buttonNewDelivery";
-            buttonNewDelivery.Size = new Size(585, 75);
+            buttonNewDelivery.Size = new Size(272, 75);
             buttonNewDelivery.TabIndex = 0;
             buttonNewDelivery.Text = "Оформить заказ";
             buttonNewDelivery.UseVisualStyleBackColor = true;
@@ -66,7 +67,7 @@
             // buttonExit
             // 
             buttonExit.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            buttonExit.Location = new Point(604, 13);
+            buttonExit.Location = new Point(291, 13);
             buttonExit.Name = "buttonExit";
             buttonExit.Size = new Size(167, 75);
             buttonExit.TabIndex = 3;
@@ -85,6 +86,7 @@
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Заказы";
             flowLayoutPanelTop.ResumeLayout(false);
+            flowLayoutPanelTop.PerformLayout();
             ResumeLayout(false);
         }
 
