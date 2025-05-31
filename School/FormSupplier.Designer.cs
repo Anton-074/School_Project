@@ -61,6 +61,7 @@
             Controls.Add(labelInfo);
             Controls.Add(labelName);
             Name = "FormSupplier";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "FormSupplier";
             ResumeLayout(false);
         }

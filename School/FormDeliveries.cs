@@ -7,9 +7,16 @@ namespace School
     public partial class FormDelivery : Form
     {
         private SchollContext? db;
+
+        private FlowLayoutPanel flowLayoutPanelTop;
+        public Button buttonOrder;
+        private Button buttonLogout;
+        private ComboBox comboBoxSort;
+
         public FormDelivery()
         {
             InitializeComponent();
+            InitializeCustomControls(); // Инициализация верхней панели
             InitializeSortingControls(); // Инициализация элементов управления для сортировки
             GeneratePanel();
         }
@@ -22,18 +29,56 @@ namespace School
         {
             GeneratePanel();
         }
+        private void InitializeCustomControls()
+        {
+            // Создаем flowLayoutPanelTop
+            flowLayoutPanelTop = new FlowLayoutPanel();
+            flowLayoutPanelTop.Size = new Size(750, 90);
+            flowLayoutPanelTop.Location = new Point(15, 20);
+            flowLayoutPanelTop.FlowDirection = FlowDirection.LeftToRight;
+            flowLayoutPanelTop.WrapContents = false;
+            flowLayoutPanelTop.AutoSize = true;
+            flowLayoutPanelTop.Dock = DockStyle.Top;
+            // Создаем кнопку "Оформить заказ"
+            buttonOrder = new Button();
+            buttonOrder.Text = "Оформить заказ";
+            buttonOrder.Size = new Size(350, 80);
+            buttonOrder.Margin = new Padding(5, 5, 5, 5);
+            buttonOrder.Font = new Font("Segoe UI Semibold", 16, FontStyle.Regular);
+            buttonOrder.Click += buttonNewDelivery_Click; // Используем уже существующий обработчик
+            // Создаем кнопку "Выход с аккаута"
+            buttonLogout = new Button();
+            buttonLogout.Text = "Выход с аккаута";
+            buttonLogout.Size = new Size(140, 80);
+            buttonLogout.Margin = new Padding(5, 5, 5, 5);
+            buttonLogout.Dock = DockStyle.Right;
+            buttonLogout.Font = new Font("Segoe UI Semibold", 16, FontStyle.Regular);
+            buttonLogout.Click += buttonExit_Click; // Используем уже существующий обработчик
+            // Добавляем кнопки в flowLayoutPanelTop
+            flowLayoutPanelTop.Controls.Add(buttonOrder);
+            
+            flowLayoutPanelTop.Controls.Add(buttonLogout);
+            // Добавляем flowLayoutPanelTop на форму
+
+            // Добавляем flowLayoutPanelTop на форму
+            this.Controls.Add(flowLayoutPanelTop);
+        }
+
         private void InitializeSortingControls()
         {
             // Создаем ComboBox для выбора критерия сортировки
-            ComboBox comboBoxSort = new ComboBox
+            comboBoxSort = new ComboBox
             {
                 Location = new System.Drawing.Point(15, 60),
-                Width = 200
+                Width = 260
             };
+            comboBoxSort.Font = new Font("Segoe UI", 12, FontStyle.Regular);
             comboBoxSort.Items.Add("Сортировать по дате доставки");
             comboBoxSort.Items.Add("Сортировать по имени поставщика");
             comboBoxSort.SelectedIndexChanged += (s, e) => SortPanels(comboBoxSort.SelectedIndex);
             flowLayoutPanelTop.Controls.Add(comboBoxSort);
+
+
         }
         public void GeneratePanel()
         {
@@ -224,6 +269,8 @@ namespace School
                 deliveries = deliveries.OrderBy(o => this.db.Suppliers.FirstOrDefault(s => s.SupplierId == o.SupplierId).SupplierName).ToList();
             }
             // Генерируем панели после сортировки
+            InitializeCustomControls();
+            InitializeSortingControls();
             GeneratePanel(deliveries);
         }
         

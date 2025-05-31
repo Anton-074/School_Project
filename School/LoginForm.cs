@@ -152,7 +152,7 @@ namespace School
         public static void CreateSupplier()
         {
             FormDelivery supplierForm = new FormDelivery();
-            supplierForm.buttonNewDelivery.Visible = false;
+            supplierForm.buttonOrder.Visible = false;
 
             supplierForm.contextMenuStrip = new ContextMenuStrip();
             ToolStripMenuItem menuEditStatuse = new ToolStripMenuItem("Изменить статус");

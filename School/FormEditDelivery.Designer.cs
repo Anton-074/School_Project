@@ -166,6 +166,7 @@
             ClientSize = new Size(561, 386);
             Controls.Add(panel1);
             Name = "FormEditDelivery";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "FormEditDelivery";
             Load += FormEditDelivery_Load;
             panel1.ResumeLayout(false);
