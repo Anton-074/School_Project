@@ -38,7 +38,7 @@
             labelName.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point, 204);
             labelName.Location = new Point(0, 0);
             labelName.Name = "labelName";
-            labelName.Size = new Size(800, 65);
+            labelName.Size = new Size(483, 65);
             labelName.TabIndex = 0;
             labelName.Text = "Поставщик: ";
             labelName.TextAlign = ContentAlignment.MiddleCenter;
@@ -49,7 +49,7 @@
             labelInfo.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 204);
             labelInfo.Location = new Point(0, 65);
             labelInfo.Name = "labelInfo";
-            labelInfo.Size = new Size(800, 385);
+            labelInfo.Size = new Size(483, 193);
             labelInfo.TabIndex = 1;
             labelInfo.Text = "Инфа";
             // 
@@ -57,7 +57,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(483, 258);
             Controls.Add(labelInfo);
             Controls.Add(labelName);
             Name = "FormSupplier";

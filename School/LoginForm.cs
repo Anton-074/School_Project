@@ -14,31 +14,16 @@ namespace School
 {
     public partial class LoginForm : Form
     {
-        /*private TextBox usernameTextBox;
-        private TextBox passwordTextBox;
-        private Button loginButton;*/
-
         private Label titleLabel;
         private Label usernameLabel;
         private Label passwordLabel;
         private TextBox usernameTextBox;
         private TextBox passwordTextBox;
         private Button loginButton;
+
+        public static string role = "";
         public LoginForm()
         {
-            /*this.StartPosition = FormStartPosition.CenterScreen;
-            // Инициализация элементов управления
-            usernameTextBox = new TextBox { Location = new System.Drawing.Point(15, 15), Width = 200 };
-            passwordTextBox = new TextBox { Location = new System.Drawing.Point(15, 50), Width = 200, PasswordChar = '*' };
-            loginButton = new Button { Text = "Войти", Location = new System.Drawing.Point(15, 85) };
-            // Обработчик события нажатия кнопки
-            loginButton.Click += LoginButton_Click;
-            // Добавление элементов на форму
-            Controls.Add(usernameTextBox);
-            Controls.Add(passwordTextBox);
-            Controls.Add(loginButton);*/
-
-
             // Настройки формы
             this.Text = "Авторизация";
             this.ClientSize = new Size(350, 250);
@@ -108,16 +93,17 @@ namespace School
         {
             string username = usernameTextBox.Text;
             string password = passwordTextBox.Text;
-            string role = AuthenticateUser(username, password);
-            if (role != null)
+            string roles = AuthenticateUser(username, password);
+            role = roles;
+            if (roles != null)
             {
                 //MessageBox.Show("Авторизация успешна!");
                 // Открытие соответствующей формы в зависимости от роли
-                if (role == "1")
+                if (roles == "1")
                 {
                     CreateAdmin();
                 }
-                else if (role == "3")
+                else if (roles == "3")
                 {
                     CreateSupplier();
                 }
@@ -170,6 +156,7 @@ namespace School
 
             supplierForm.contextMenuStrip = new ContextMenuStrip();
             ToolStripMenuItem menuEditStatuse = new ToolStripMenuItem("Изменить статус");
+            ToolStripMenuItem menuShowAssembly = new ToolStripMenuItem("Подробнее о сборке");
             menuEditStatuse.Click += supplierForm.MenuEditStatuse_Click;
             supplierForm.contextMenuStrip.Items.Add(menuEditStatuse);
             supplierForm.Show();//Доделать что бы форма возвращалась

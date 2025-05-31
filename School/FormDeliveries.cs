@@ -11,7 +11,6 @@ namespace School
         {
             InitializeComponent();
             GeneratePanel();
-
         }
         protected override void OnLoad(EventArgs e)
         {
@@ -81,16 +80,49 @@ namespace School
                     //BorderStyle = BorderStyle.FixedSingle,
                     Text = $"Заказ: \nКомпьютер\nСерийный номер {del.AssemblyId}\n{schoolNumber.SchoolName}\n{del.DeliveryDate}"
                 };
+
+                //----------------
+                Button threeDotsButton = new Button
+                {
+                    Text = "...",
+                    Size = new System.Drawing.Size(30, 30),
+                    Dock = DockStyle.Right,
+                    Location = new System.Drawing.Point(supplierPanel.Width - 40, 5) // Позиция в правом верхнем углу
+                };
+                threeDotsButton.Click += (s, e) => ShowContextMenu(threeDotsButton, del);
+                threeDotsButton.Click += panelLabel_MouseDown;
+                threeDotsButton.Tag = supplierPanel;
+                //-----------------
                 assemblyLabel.Font = new Font("Arial", 12, FontStyle.Regular);
 
                 supplierPanel.Controls.Add(assemblyLabel);
                 rightPanel.Controls.Add(supplierLabel);
                 rightPanel.Controls.Add(statuseLabel);
+                //rightPanel.Controls.Add(threeDotsButton);
                 supplierPanel.Controls.Add(rightPanel);
-
+                //----
+                
+                supplierPanel.Controls.Add(threeDotsButton); // Добавляем кнопку на панель
+                //----
                 this.Controls.Add(supplierPanel);
                 yOffset += supplierPanel.Height + 30;
             }
+        }
+        private void ShowContextMenu(Control control, Delivery del)
+        {
+
+            ContextMenuStrip contextMenu = new ContextMenuStrip();
+            if(LoginForm.role=="1")
+            {
+                contextMenu.Items.Add("Редактировать заказ", null, MenuEdit_Click);
+                contextMenu.Items.Add("Подробнее о поставщике", null, MenuShowSupplier_Click);
+            }
+            else if (LoginForm.role == "3")
+            {
+                contextMenu.Items.Add("Изменить статус заказа", null, MenuEditStatuse_Click);
+            }
+            contextMenu.Items.Add("Подробнее о сборке", null, MenuShowAssembly_Click);
+            contextMenu.Show(control, new Point(0, control.Height));
         }
         private void buttonNewDelivery_Click(object sender, EventArgs e)
         {
@@ -161,18 +193,25 @@ namespace School
             LoginForm.CreateAdmin();
         }
 
-        public void panelLabel_MouseDown(object sender, MouseEventArgs e)
+        public void panelLabel_MouseDown(object sender, EventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
+
+            /*Panel clickedPanel = sender as Panel;
+            if (clickedPanel != null)
             {
-                Panel clickedPanel = sender as Panel;
-                if (clickedPanel != null)
-                {
-                    contextMenuStrip.Tag = clickedPanel; // Сохраняем ссылку на панель
-                    contextMenuStrip.Show(clickedPanel, e.Location);
-                }
+                contextMenuStrip.Tag = clickedPanel; // Сохраняем ссылку на панель
+                contextMenuStrip.Show(clickedPanel, e.Location);
+            }*/
+
+            Button clickedPanel = sender as Button;
+            if (clickedPanel != null)
+            {
+                contextMenuStrip.Tag = clickedPanel.Tag; // Сохраняем ссылку на панель
+                ;
             }
+
         }
+
         public void MenuEdit_Click(object sender, EventArgs e)
         {
             Panel clickedPanel = contextMenuStrip.Tag as Panel; // Получаем панель из Tag
