@@ -158,8 +158,7 @@ namespace School
             db.SaveChanges();
 
             this.Hide();
-            FormDelivery formDel = new FormDelivery();
-            formDel.Show();
+            LoginForm.CreateAdmin();
         }
 
         public void panelLabel_MouseDown(object sender, MouseEventArgs e)
@@ -291,8 +290,7 @@ namespace School
                 db.SaveChanges();
 
                 this.Hide();
-                FormDelivery formDel = new FormDelivery();
-                formDel.Show();
+                LoginForm.CreateAdmin();
             }
         }
         public void MenuShowSupplier_Click(object sender, EventArgs e)
@@ -372,8 +370,7 @@ namespace School
                 db.SaveChanges();
 
                 this.Hide();
-                FormDelivery formDel = new FormDelivery();
-                formDel.Show();
+                LoginForm.CreateSupplier();
             }
         }
 

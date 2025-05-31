@@ -42,29 +42,11 @@ namespace School
                 // Открытие соответствующей формы в зависимости от роли
                 if (role == "1")
                 {
-                    FormDelivery adminForm = new FormDelivery();
-                    adminForm.contextMenuStrip = new ContextMenuStrip();
-                    ToolStripMenuItem menuEdit = new ToolStripMenuItem("Редактировать заказ");
-                    ToolStripMenuItem menuShowSupplier = new ToolStripMenuItem("Подробнее о поставщике");
-                    ToolStripMenuItem menuShowAssembly = new ToolStripMenuItem("Подробнее о сборке");
-                    menuEdit.Click += adminForm.MenuEdit_Click; // Подписка на событие клика
-                    menuShowSupplier.Click += adminForm.MenuShowSupplier_Click;
-                    menuShowAssembly.Click += adminForm.MenuShowAssembly_Click;
-                    adminForm.contextMenuStrip.Items.Add(menuEdit);
-                    adminForm.contextMenuStrip.Items.Add(menuShowSupplier);
-                    adminForm.contextMenuStrip.Items.Add(menuShowAssembly);
-                    adminForm.Show();
+                    CreateAdmin();
                 }
                 else if (role == "3")
                 {
-                    FormDelivery supplierForm = new FormDelivery();
-                    supplierForm.buttonNewDelivery.Visible = false;
-
-                    supplierForm.contextMenuStrip = new ContextMenuStrip();
-                    ToolStripMenuItem menuEditStatuse = new ToolStripMenuItem("Изменить статус");
-                    menuEditStatuse.Click += supplierForm.MenuEditStatuse_Click;
-                    supplierForm.contextMenuStrip.Items.Add(menuEditStatuse);
-                    supplierForm.Show();//Доделать что бы форма возвращалась
+                    CreateSupplier();
                 }
                 this.Hide(); // Скрыть форму авторизации
             }
@@ -91,6 +73,33 @@ namespace School
                     return result != null ? result.ToString() : null; // Возвращаем роль или null, если не найдено
                 }
             }
+        }
+
+        public static void CreateAdmin()
+        {
+            FormDelivery adminForm = new FormDelivery();
+            adminForm.contextMenuStrip = new ContextMenuStrip();
+            ToolStripMenuItem menuEdit = new ToolStripMenuItem("Редактировать заказ");
+            ToolStripMenuItem menuShowSupplier = new ToolStripMenuItem("Подробнее о поставщике");
+            ToolStripMenuItem menuShowAssembly = new ToolStripMenuItem("Подробнее о сборке");
+            menuEdit.Click += adminForm.MenuEdit_Click; // Подписка на событие клика
+            menuShowSupplier.Click += adminForm.MenuShowSupplier_Click;
+            menuShowAssembly.Click += adminForm.MenuShowAssembly_Click;
+            adminForm.contextMenuStrip.Items.Add(menuEdit);
+            adminForm.contextMenuStrip.Items.Add(menuShowSupplier);
+            adminForm.contextMenuStrip.Items.Add(menuShowAssembly);
+            adminForm.Show();
+        }
+        public static void CreateSupplier()
+        {
+            FormDelivery supplierForm = new FormDelivery();
+            supplierForm.buttonNewDelivery.Visible = false;
+
+            supplierForm.contextMenuStrip = new ContextMenuStrip();
+            ToolStripMenuItem menuEditStatuse = new ToolStripMenuItem("Изменить статус");
+            menuEditStatuse.Click += supplierForm.MenuEditStatuse_Click;
+            supplierForm.contextMenuStrip.Items.Add(menuEditStatuse);
+            supplierForm.Show();//Доделать что бы форма возвращалась
         }
     }
 }
