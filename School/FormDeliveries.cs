@@ -33,12 +33,13 @@ namespace School
         {
             // Создаем flowLayoutPanelTop
             flowLayoutPanelTop = new FlowLayoutPanel();
-            flowLayoutPanelTop.Size = new Size(750, 90);
+            flowLayoutPanelTop.Dock = DockStyle.Top;
+            flowLayoutPanelTop.Size = new Size(750, 300);
             flowLayoutPanelTop.Location = new Point(15, 20);
             flowLayoutPanelTop.FlowDirection = FlowDirection.LeftToRight;
             flowLayoutPanelTop.WrapContents = false;
             flowLayoutPanelTop.AutoSize = true;
-            flowLayoutPanelTop.Dock = DockStyle.Top;
+            flowLayoutPanelTop.BorderStyle = BorderStyle.FixedSingle ;
             // Создаем кнопку "Оформить заказ"
             buttonOrder = new Button();
             buttonOrder.Text = "Оформить заказ";
@@ -49,19 +50,24 @@ namespace School
             // Создаем кнопку "Выход с аккаута"
             buttonLogout = new Button();
             buttonLogout.Text = "Выход с аккаута";
-            buttonLogout.Size = new Size(140, 80);
+            buttonLogout.Size = new Size(150, 80);
             buttonLogout.Margin = new Padding(5, 5, 5, 5);
-            buttonLogout.Dock = DockStyle.Right;
             buttonLogout.Font = new Font("Segoe UI Semibold", 16, FontStyle.Regular);
             buttonLogout.Click += buttonExit_Click; // Используем уже существующий обработчик
-            // Добавляем кнопки в flowLayoutPanelTop
-            flowLayoutPanelTop.Controls.Add(buttonOrder);
+            if(LoginForm.role != "3")
+            {
+                flowLayoutPanelTop.Controls.Add(buttonOrder);
+            }
+            
             
             flowLayoutPanelTop.Controls.Add(buttonLogout);
-            // Добавляем flowLayoutPanelTop на форму
+            
+            
 
             // Добавляем flowLayoutPanelTop на форму
             this.Controls.Add(flowLayoutPanelTop);
+
+            
         }
 
         private void InitializeSortingControls()
@@ -69,12 +75,16 @@ namespace School
             // Создаем ComboBox для выбора критерия сортировки
             comboBoxSort = new ComboBox
             {
-                Location = new System.Drawing.Point(15, 60),
-                Width = 260
+                DropDownStyle = ComboBoxStyle.DropDownList,
+                Width = 300
+                
             };
+            
             comboBoxSort.Font = new Font("Segoe UI", 12, FontStyle.Regular);
-            comboBoxSort.Items.Add("Сортировать по дате доставки");
+            comboBoxSort.Items.Add("Сортировать по дате заказа");
             comboBoxSort.Items.Add("Сортировать по имени поставщика");
+            comboBoxSort.Items.Add("Сортировать по названию организации");
+            comboBoxSort.Items.Add("Сортировать по статусу");
             comboBoxSort.SelectedIndexChanged += (s, e) => SortPanels(comboBoxSort.SelectedIndex);
             flowLayoutPanelTop.Controls.Add(comboBoxSort);
 
@@ -268,6 +278,14 @@ namespace School
             {
                 deliveries = deliveries.OrderBy(o => this.db.Suppliers.FirstOrDefault(s => s.SupplierId == o.SupplierId).SupplierName).ToList();
             }
+            else if (sortOption == 2)
+            {
+                deliveries = deliveries.OrderBy(o => this.db.Schools.FirstOrDefault(s => s.SchoolId == o.SchoolId).SchoolName).ToList();
+            }
+            else if (sortOption == 3)
+            {
+                deliveries = deliveries.OrderBy(o => this.db.Statuses.FirstOrDefault(s => s.StatusId == o.StatusId).StatusName).ToList();
+            }
             // Генерируем панели после сортировки
             InitializeCustomControls();
             InitializeSortingControls();
@@ -281,6 +299,7 @@ namespace School
             if(LoginForm.role=="1")
             {
                 contextMenu.Items.Add("Редактировать заказ", null, MenuEdit_Click);
+                contextMenu.Items.Add("Удалить заказ", null, MenuDelete_Click);
                 contextMenu.Items.Add("Подробнее о поставщике", null, MenuShowSupplier_Click);
             }
             else if (LoginForm.role == "3")
@@ -350,7 +369,8 @@ namespace School
 
                 SupplierId = indexSupply,
                 AssemblyId = indexAssembly,
-                SchoolId = indexSchool
+                SchoolId = indexSchool,
+                StatusId = 1
             };
             db.Deliveries.Add(delivery);
             db.SaveChanges();
@@ -512,10 +532,38 @@ namespace School
                 supplier.Show();
             }
         }
+        public void MenuDelete_Click(object sender, EventArgs e)
+        {
+            Panel clickedPanel = contextMenuStrip.Tag as Panel; // Получаем панель из Tag
+            if (clickedPanel != null)
+            {
+                DialogResult result = MessageBox.Show(
+                "Вы уверены, что хотите удалить объект?",
+                "",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+
+                if (result == DialogResult.No)
+                    return;
+
+                string splits = (string)clickedPanel.Tag;
+                string[] Ids = splits.Split(",", StringSplitOptions.RemoveEmptyEntries);
+
+                int delivaryId = Int32.Parse(Ids[0]);
+
+                Delivery delivery = db.Deliveries.Find(delivaryId);
+
+                db.Deliveries.Remove(delivery);
+                db.SaveChanges();
+                this.Hide();
+                LoginForm.CreateAdmin();
+            }
+        }
         public void MenuShowAssembly_Click(object sender, EventArgs e)
         {
 
         }
+
         public void MenuEditStatuse_Click(object sender, EventArgs e)
         {
             Panel clickedPanel = contextMenuStrip.Tag as Panel; // Получаем панель из Tag
