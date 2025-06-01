@@ -13,5 +13,5 @@ public partial class Schools
 
     public virtual ICollection<Delivery> Deliveries { get; set; } = new List<Delivery>();
 
-    public virtual ICollection<SchoolRole> SchoolRoles { get; set; } = new List<SchoolRole>();
+    public virtual ICollection<UserSchool> UserSchools { get; set; } = new List<UserSchool>();
 }

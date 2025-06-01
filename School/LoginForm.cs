@@ -1,4 +1,5 @@
 ﻿using Npgsql;
+using School.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,6 +15,8 @@ namespace School
 {
     public partial class LoginForm : Form
     {
+        private SchollContext? db;
+
         private Label titleLabel;
         private Label usernameLabel;
         private Label passwordLabel;
@@ -21,7 +24,8 @@ namespace School
         private TextBox passwordTextBox;
         private Button loginButton;
 
-        public static string role = "";
+        public static string role = null;
+        public static int user = -1;
         public LoginForm()
         {
             // Настройки формы
@@ -91,19 +95,20 @@ namespace School
         }
         private void LoginButton_Click(object sender, EventArgs e)
         {
+            this.db = new SchollContext();
             string username = usernameTextBox.Text;
             string password = passwordTextBox.Text;
-            string roles = AuthenticateUser(username, password);
-            role = roles;
-            if (roles != null)
+            user = Int32.Parse(AuthenticateUser(username, password));
+            if (user != -1)
             {
                 //MessageBox.Show("Авторизация успешна!");
                 // Открытие соответствующей формы в зависимости от роли
-                if (roles == "1")
+                role = (db.Users.Where(w => w.UserId == user).Select(s => s.RoleId).FirstOrDefault()).ToString();
+                if (role == "1")
                 {
                     CreateAdmin();
                 }
-                else if (roles == "3")
+                else if (role == "3")
                 {
                     CreateSupplier();
                 }
@@ -122,14 +127,14 @@ namespace School
             {
                 connection.Open();
                 // SQL-запрос для проверки учетных данных и получения роли
-                string query = "SELECT role_id FROM users WHERE username = @username AND password = @password";
+                string query = "SELECT user_id FROM users WHERE username = @username AND password = @password";
                 using (var command = new NpgsqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("username", username);
                     command.Parameters.AddWithValue("password", password); // В реальном приложении используйте хеширование паролей
                     // Получаем роль пользователя
                     object result = command.ExecuteScalar();
-                    return result != null ? result.ToString() : null; // Возвращаем роль или null, если не найдено
+                    return result != null ? result.ToString() : "-1"; // Возвращаем роль или null, если не найдено
                 }
             }
         }

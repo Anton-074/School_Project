@@ -31,8 +31,6 @@ public partial class SchollContext : DbContext
 
     public virtual DbSet<Schools> Schools { get; set; }
 
-    public virtual DbSet<SchoolRole> SchoolRoles { get; set; }
-
     public virtual DbSet<Status> Statuses { get; set; }
 
     public virtual DbSet<Supplier> Suppliers { get; set; }
@@ -40,6 +38,10 @@ public partial class SchollContext : DbContext
     public virtual DbSet<TypeComponent> TypeComponents { get; set; }
 
     public virtual DbSet<TypeSupplier> TypeSuppliers { get; set; }
+
+    public virtual DbSet<User> Users { get; set; }
+
+    public virtual DbSet<UserSchool> UserSchools { get; set; }
 
     public virtual DbSet<Warehouse> Warehouses { get; set; }
 
@@ -142,7 +144,9 @@ public partial class SchollContext : DbContext
 
             entity.Property(e => e.DeliveryId).HasColumnName("delivery_id");
             entity.Property(e => e.AssemblyId).HasColumnName("assembly_id");
-            entity.Property(e => e.DeliveryDate).HasColumnName("delivery_date");
+            entity.Property(e => e.DeliveryDate)
+                .HasDefaultValueSql("CURRENT_DATE")
+                .HasColumnName("delivery_date");
             entity.Property(e => e.SchoolId).HasColumnName("school_id");
             entity.Property(e => e.StatusId).HasColumnName("status_id");
             entity.Property(e => e.SupplierId).HasColumnName("supplier_id");
@@ -215,29 +219,6 @@ public partial class SchollContext : DbContext
                 .HasColumnName("school_name");
         });
 
-        modelBuilder.Entity<SchoolRole>(entity =>
-        {
-            entity.HasKey(e => e.SchoolRoleId).HasName("school_roles_pkey");
-
-            entity.ToTable("school_roles");
-
-            entity.HasIndex(e => new { e.SchoolId, e.RoleId }, "school_roles_school_id_role_id_key").IsUnique();
-
-            entity.Property(e => e.SchoolRoleId).HasColumnName("school_role_id");
-            entity.Property(e => e.RoleId).HasColumnName("role_id");
-            entity.Property(e => e.SchoolId).HasColumnName("school_id");
-
-            entity.HasOne(d => d.Role).WithMany(p => p.SchoolRoles)
-                .HasForeignKey(d => d.RoleId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("school_roles_role_id_fkey");
-
-            entity.HasOne(d => d.School).WithMany(p => p.SchoolRoles)
-                .HasForeignKey(d => d.SchoolId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("school_roles_school_id_fkey");
-        });
-
         modelBuilder.Entity<Status>(entity =>
         {
             entity.HasKey(e => e.StatusId).HasName("status_pkey");
@@ -268,11 +249,17 @@ public partial class SchollContext : DbContext
                 .HasMaxLength(100)
                 .HasColumnName("supplier_name");
             entity.Property(e => e.TypeSupplierId).HasColumnName("type_supplier_id");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
 
             entity.HasOne(d => d.TypeSupplier).WithMany(p => p.Suppliers)
                 .HasForeignKey(d => d.TypeSupplierId)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_type_supplier_id_to_suppliers");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Suppliers)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("fk_user_id_to_suppliers");
         });
 
         modelBuilder.Entity<TypeComponent>(entity =>
@@ -293,6 +280,44 @@ public partial class SchollContext : DbContext
 
             entity.Property(e => e.TypeSupplierId).HasColumnName("type_supplier_id");
             entity.Property(e => e.TypeSupplierName).HasColumnName("type_supplier_name");
+        });
+
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.HasKey(e => e.UserId).HasName("school_roles_pkey");
+
+            entity.ToTable("users");
+
+            entity.Property(e => e.UserId)
+                .HasDefaultValueSql("nextval('school_roles_school_role_id_seq'::regclass)")
+                .HasColumnName("user_id");
+            entity.Property(e => e.Password).HasColumnName("password");
+            entity.Property(e => e.RoleId).HasColumnName("role_id");
+            entity.Property(e => e.Username).HasColumnName("username");
+
+            entity.HasOne(d => d.Role).WithMany(p => p.Users)
+                .HasForeignKey(d => d.RoleId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("school_roles_role_id_fkey");
+        });
+
+        modelBuilder.Entity<UserSchool>(entity =>
+        {
+            entity.HasKey(e => e.UserSchoolId).HasName("user_schools_pkey");
+
+            entity.ToTable("user_schools");
+
+            entity.Property(e => e.UserSchoolId).HasColumnName("user_school_id");
+            entity.Property(e => e.SchoolId).HasColumnName("school_id");
+            entity.Property(e => e.UsersId).HasColumnName("users_id");
+
+            entity.HasOne(d => d.School).WithMany(p => p.UserSchools)
+                .HasForeignKey(d => d.SchoolId)
+                .HasConstraintName("fk_schools_id");
+
+            entity.HasOne(d => d.Users).WithMany(p => p.UserSchools)
+                .HasForeignKey(d => d.UsersId)
+                .HasConstraintName("fk_users_id");
         });
 
         modelBuilder.Entity<Warehouse>(entity =>

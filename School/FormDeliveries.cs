@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using School.Models;
 using System.Reflection;
 using System.Windows.Forms;
@@ -93,8 +94,12 @@ namespace School
         public void GeneratePanel()
         {
             this.db = new SchollContext();
+            
+            //var deliveries = db.Deliveries.ToList();
+            
+                var deliveries = db.Deliveries.Include(i => i.Supplier).Where(w => w.Supplier.UserId == LoginForm.user).ToList();
+            
 
-            var deliveries = db.Deliveries.ToList();
 
             int yOffset = 100;
             foreach (Delivery del in deliveries)
