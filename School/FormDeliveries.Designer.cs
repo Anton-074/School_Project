@@ -44,6 +44,7 @@
             AutoScroll = true;
             ClientSize = new Size(800, 450);
             Name = "FormDelivery";
+            Padding = new Padding(10);
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Заказы";
             ResumeLayout(false);

@@ -32,6 +32,8 @@ namespace School
         }
         private void InitializeCustomControls()
         {
+            this.BackColor = Color.FromArgb(40, 45, 60);
+
             // Создаем flowLayoutPanelTop
             flowLayoutPanelTop = new FlowLayoutPanel();
             flowLayoutPanelTop.Dock = DockStyle.Top;
@@ -41,19 +43,28 @@ namespace School
             flowLayoutPanelTop.WrapContents = false;
             flowLayoutPanelTop.AutoSize = true;
             flowLayoutPanelTop.BorderStyle = BorderStyle.FixedSingle ;
+            flowLayoutPanelTop.BackColor = Color.LightGray;
             // Создаем кнопку "Оформить заказ"
             buttonOrder = new Button();
             buttonOrder.Text = "Оформить заказ";
             buttonOrder.Size = new Size(350, 80);
             buttonOrder.Margin = new Padding(5, 5, 5, 5);
-            buttonOrder.Font = new Font("Segoe UI Semibold", 16, FontStyle.Regular);
+            buttonOrder.BackColor = Color.FromArgb(0, 122, 204);
+            buttonOrder.ForeColor = Color.White;
+            buttonOrder.FlatStyle = FlatStyle.Flat;
+            buttonOrder.Font = new Font("Segoe UI Semibold", 16, FontStyle.Bold);
+            buttonOrder.FlatAppearance.BorderSize = 0; // Remove border
             buttonOrder.Click += buttonNewDelivery_Click; // Используем уже существующий обработчик
             // Создаем кнопку "Выход с аккаута"
             buttonLogout = new Button();
             buttonLogout.Text = "Выход с аккаута";
             buttonLogout.Size = new Size(150, 80);
             buttonLogout.Margin = new Padding(5, 5, 5, 5);
-            buttonLogout.Font = new Font("Segoe UI Semibold", 16, FontStyle.Regular);
+            buttonLogout.BackColor = Color.FromArgb(0, 122, 204);
+            buttonLogout.ForeColor = Color.White; // Button color
+            buttonLogout.FlatStyle = FlatStyle.Flat; // Flat style for modern look
+            buttonLogout.Font = new Font("Segoe UI Semibold", 16, FontStyle.Bold);
+            buttonLogout.FlatAppearance.BorderSize = 0; // Remove border
             buttonLogout.Click += buttonExit_Click; // Используем уже существующий обработчик
             if(LoginForm.role != "3")
             {
@@ -94,14 +105,21 @@ namespace School
         public void GeneratePanel()
         {
             this.db = new SchollContext();
+            List<Delivery> deliveries;
+            if (LoginForm.role == "3")
+            {
+                 deliveries = db.Deliveries.Include(i => i.Supplier).Where(w => w.Supplier.UserId == LoginForm.user).ToList();
+            }
+            else
+            {
+                 deliveries = db.Deliveries.ToList();
+            }
             
-            //var deliveries = db.Deliveries.ToList();
-            
-                var deliveries = db.Deliveries.Include(i => i.Supplier).Where(w => w.Supplier.UserId == LoginForm.user).ToList();
+             
             
 
 
-            int yOffset = 100;
+            int yOffset = 120;
             foreach (Delivery del in deliveries)
             {
                 var supplier = this.db.Suppliers.Where(w => w.SupplierId == del.SupplierId).FirstOrDefault();
@@ -115,6 +133,7 @@ namespace School
                     Size = new System.Drawing.Size(770, 140),
                     Location = new System.Drawing.Point(15, yOffset),
                     BorderStyle = BorderStyle.FixedSingle,
+                    BackColor = Color.White, // Background color for the delivery panel
                     Tag = $"{del.DeliveryId},{supplier.SupplierId},{assemb.AssemblyId},{schoolNumber.SchoolId},{statuse.StatusId}"
                 };
                 Panel rightPanel = new Panel
@@ -184,7 +203,7 @@ namespace School
         }
         private void GeneratePanel(List<Delivery> deliveries)
         {
-            int yOffset = 100;
+            int yOffset = 120;
             foreach (Delivery del in deliveries)
             {
                 // Создание панелей и добавление их на форму (как в предыдущем примере)
@@ -200,6 +219,7 @@ namespace School
                     Size = new System.Drawing.Size(770, 140),
                     Location = new System.Drawing.Point(15, yOffset),
                     BorderStyle = BorderStyle.FixedSingle,
+                    BackColor = Color.White,
                     Tag = $"{del.DeliveryId},{supplier.SupplierId},{assemb.AssemblyId},{schoolNumber.SchoolId},{statuse.StatusId}"
                 };
                 Panel rightPanel = new Panel
