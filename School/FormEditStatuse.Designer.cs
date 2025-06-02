@@ -119,6 +119,7 @@
             ClientSize = new Size(539, 256);
             Controls.Add(panel1);
             Name = "FormEditStatuse";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "FormEditStatuse";
             panel1.ResumeLayout(false);
             panelBut.ResumeLayout(false);
