@@ -16,6 +16,37 @@ namespace School
         public FormEditDelivery()
         {
             InitializeComponent();
+            this.Text = "Редактирование заказа";
+            panel1.BackColor = Color.FromArgb(40, 45, 60);
+            panel1.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
+
+            label3.Text = "Редактирование заказа";
+            label3.ForeColor = Color.White;
+            label3.Font = new Font("Segoe UI Semibold", 18F, FontStyle.Bold);
+
+            label.ForeColor = Color.WhiteSmoke;
+            label1.ForeColor = Color.WhiteSmoke;
+            label2.ForeColor = Color.WhiteSmoke;
+
+            comboBoxAssembly.BackColor = Color.White;
+            comboBoxSchool.BackColor = Color.White;
+            comboBoxSupply.BackColor = Color.White;
+
+            panelBut.BackColor = Color.FromArgb(40, 45, 60);
+
+            buttonCancel.BackColor = Color.FromArgb(0, 122, 204);
+            buttonCancel.ForeColor = Color.White;
+            buttonCancel.Font = new Font("Segoe UI Semibold", 14F, FontStyle.Bold);
+            buttonCancel.Cursor = Cursors.Hand;
+            buttonCancel.FlatStyle = FlatStyle.Flat;
+            buttonCancel.FlatAppearance.BorderSize = 0;
+
+            buttonSave.BackColor = Color.FromArgb(0, 122, 204);
+            buttonSave.ForeColor = Color.White;
+            buttonSave.Font = new Font("Segoe UI Semibold", 14F, FontStyle.Bold);
+            buttonSave.Cursor = Cursors.Hand;
+            buttonSave.FlatStyle = FlatStyle.Flat;
+            buttonSave.FlatAppearance.BorderSize = 0;
         }
 
         private void FormEditDelivery_Load(object sender, EventArgs e)

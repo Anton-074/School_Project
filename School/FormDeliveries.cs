@@ -13,12 +13,15 @@ namespace School
         public Button buttonOrder;
         private Button buttonLogout;
         private ComboBox comboBoxSort;
+        private Panel panelSort;
+        private Label labelSort;
+
 
         public FormDelivery()
         {
             InitializeComponent();
             InitializeCustomControls(); // Инициализация верхней панели
-            InitializeSortingControls(); // Инициализация элементов управления для сортировки
+            //InitializeSortingControls(); // Инициализация элементов управления для сортировки
             GeneratePanel();
         }
         protected override void OnLoad(EventArgs e)
@@ -37,7 +40,7 @@ namespace School
             // Создаем flowLayoutPanelTop
             flowLayoutPanelTop = new FlowLayoutPanel();
             flowLayoutPanelTop.Dock = DockStyle.Top;
-            flowLayoutPanelTop.Size = new Size(750, 300);
+            flowLayoutPanelTop.Size = new Size(740, 300);
             flowLayoutPanelTop.Location = new Point(15, 20);
             flowLayoutPanelTop.FlowDirection = FlowDirection.LeftToRight;
             flowLayoutPanelTop.WrapContents = false;
@@ -47,7 +50,7 @@ namespace School
             // Создаем кнопку "Оформить заказ"
             buttonOrder = new Button();
             buttonOrder.Text = "Оформить заказ";
-            buttonOrder.Size = new Size(350, 80);
+            buttonOrder.Size = new Size(240, 80);
             buttonOrder.Margin = new Padding(5, 5, 5, 5);
             buttonOrder.BackColor = Color.FromArgb(0, 122, 204);
             buttonOrder.ForeColor = Color.White;
@@ -57,8 +60,8 @@ namespace School
             buttonOrder.Click += buttonNewDelivery_Click; // Используем уже существующий обработчик
             // Создаем кнопку "Выход с аккаута"
             buttonLogout = new Button();
-            buttonLogout.Text = "Выход с аккаута";
-            buttonLogout.Size = new Size(150, 80);
+            buttonLogout.Text = "Выход с аккаунта";
+            buttonLogout.Size = new Size(200,80);
             buttonLogout.Margin = new Padding(5, 5, 5, 5);
             buttonLogout.BackColor = Color.FromArgb(0, 122, 204);
             buttonLogout.ForeColor = Color.White; // Button color
@@ -66,12 +69,32 @@ namespace School
             buttonLogout.Font = new Font("Segoe UI Semibold", 16, FontStyle.Bold);
             buttonLogout.FlatAppearance.BorderSize = 0; // Remove border
             buttonLogout.Click += buttonExit_Click; // Используем уже существующий обработчик
-            if(LoginForm.role != "3")
+
+            panelSort = new Panel();
+            panelSort.Size = new Size(310, 80);
+            panelSort.Margin = new Padding(5, 5, 5, 5);
+            panelSort.BackColor = Color.FromArgb(0, 122, 204);
+            panelSort.Padding = new Padding(5, 15, 5, 5);
+
+            labelSort = new Label();
+            labelSort.Text = "Сортировка";
+            labelSort.Size = new Size(310, 30);
+            labelSort.Font = new Font("Segoe UI Semibold", 16, FontStyle.Bold);
+            labelSort.ForeColor = Color.White;
+            labelSort.Dock = DockStyle.Top;
+
+
+
+            if (LoginForm.role != "3")
             {
                 flowLayoutPanelTop.Controls.Add(buttonOrder);
             }
-            
-            
+
+            InitializeSortingControls();
+            comboBoxSort.Dock = DockStyle.Bottom;
+            panelSort.Controls.Add(labelSort);
+            panelSort.Controls.Add(comboBoxSort);
+            flowLayoutPanelTop.Controls.Add(panelSort);
             flowLayoutPanelTop.Controls.Add(buttonLogout);
             
             
@@ -91,21 +114,24 @@ namespace School
                 Width = 300
                 
             };
+
             
+
             comboBoxSort.Font = new Font("Segoe UI", 12, FontStyle.Regular);
             comboBoxSort.Items.Add("Сортировать по дате заказа");
             comboBoxSort.Items.Add("Сортировать по имени поставщика");
             comboBoxSort.Items.Add("Сортировать по названию организации");
             comboBoxSort.Items.Add("Сортировать по статусу");
             comboBoxSort.SelectedIndexChanged += (s, e) => SortPanels(comboBoxSort.SelectedIndex);
-            flowLayoutPanelTop.Controls.Add(comboBoxSort);
+            
 
 
         }
         public void GeneratePanel()
         {
-            this.db = new SchollContext();
             List<Delivery> deliveries;
+            this.db = new SchollContext();
+            
             if (LoginForm.role == "3")
             {
                  deliveries = db.Deliveries.Include(i => i.Supplier).Where(w => w.Supplier.UserId == LoginForm.user).ToList();
@@ -114,186 +140,123 @@ namespace School
             {
                  deliveries = db.Deliveries.ToList();
             }
-            
-             
-            
-
 
             int yOffset = 120;
             foreach (Delivery del in deliveries)
             {
-                var supplier = this.db.Suppliers.Where(w => w.SupplierId == del.SupplierId).FirstOrDefault();
-                var typeSupply = this.db.TypeSuppliers.Where(w => w.TypeSupplierId == supplier.TypeSupplierId).FirstOrDefault();
-                var schoolNumber = this.db.Schools.Where(w => w.SchoolId == del.SchoolId).FirstOrDefault();
-                var assemb = this.db.Assemblies.Where(w => w.AssemblyId == del.AssemblyId).FirstOrDefault();
-                var statuse = this.db.Statuses.Where(w => w.StatusId == del.StatusId).FirstOrDefault();
-
-                Panel supplierPanel = new Panel
-                {
-                    Size = new System.Drawing.Size(770, 140),
-                    Location = new System.Drawing.Point(15, yOffset),
-                    BorderStyle = BorderStyle.FixedSingle,
-                    BackColor = Color.White, // Background color for the delivery panel
-                    Tag = $"{del.DeliveryId},{supplier.SupplierId},{assemb.AssemblyId},{schoolNumber.SchoolId},{statuse.StatusId}"
-                };
-                Panel rightPanel = new Panel
-                {
-                    Size = new System.Drawing.Size(250, 140),
-                    Dock = DockStyle.Right,
-                    //BorderStyle = BorderStyle.FixedSingle
-                };
-                supplierPanel.MouseDown += panelLabel_MouseDown;
-                //supplierPanel.MouseDown += panelLabel_MouseDown;
-                Label supplierLabel = new Label
-                {
-                    AutoSize = false,
-                    Size = new System.Drawing.Size(250, 30),
-                    Dock = DockStyle.Bottom,
-                    Text = $" Поставщик: {typeSupply.TypeSupplierName} {supplier.SupplierName}",
-                    TextAlign = ContentAlignment.BottomRight
-                };
-                supplierLabel.Font = new Font("Arial", 12, FontStyle.Regular);
-
-                Label statuseLabel = new Label
-                {
-                    AutoSize = false,
-                    Size = new System.Drawing.Size(250, 30),
-                    Dock = DockStyle.Top,
-                    Text = $" Статус:{statuse.StatusName}",
-                    TextAlign = ContentAlignment.BottomRight
-                };
-                statuseLabel.Font = new Font("Arial", 12, FontStyle.Regular);
-
-                Label assemblyLabel = new Label
-                {
-                    AutoSize = false,
-                    Dock = DockStyle.Left,
-                    Size = new System.Drawing.Size(250, 140),
-                    TextAlign = ContentAlignment.MiddleLeft,
-                    //BorderStyle = BorderStyle.FixedSingle,
-                    Text = $"Заказ: \nКомпьютер\nСерийный номер {del.AssemblyId}\n{schoolNumber.SchoolName}\n{del.DeliveryDate}"
-                };
-
-                //----------------
-                Button threeDotsButton = new Button
-                {
-                    Text = "...",
-                    Size = new System.Drawing.Size(30, 30),
-                    Dock = DockStyle.Right,
-                    Location = new System.Drawing.Point(supplierPanel.Width - 40, 5) // Позиция в правом верхнем углу
-                };
-                threeDotsButton.Click += (s, e) => ShowContextMenu(threeDotsButton, del);
-                threeDotsButton.Click += panelLabel_MouseDown;
-                threeDotsButton.Tag = supplierPanel;
-                //-----------------
-                assemblyLabel.Font = new Font("Arial", 12, FontStyle.Regular);
-
-                supplierPanel.Controls.Add(assemblyLabel);
-                rightPanel.Controls.Add(supplierLabel);
-                rightPanel.Controls.Add(statuseLabel);
-                //rightPanel.Controls.Add(threeDotsButton);
-                supplierPanel.Controls.Add(rightPanel);
-                //----
-                
-                supplierPanel.Controls.Add(threeDotsButton); // Добавляем кнопку на панель
-                //----
-                this.Controls.Add(supplierPanel);
-                yOffset += supplierPanel.Height + 30;
+                int height = GenerateDeliveries(del, yOffset);
+                yOffset += height + 30;
             }
         }
         private void GeneratePanel(List<Delivery> deliveries)
         {
+            
             int yOffset = 120;
             foreach (Delivery del in deliveries)
             {
-                // Создание панелей и добавление их на форму (как в предыдущем примере)
-                // ...
-                var supplier = this.db.Suppliers.Where(w => w.SupplierId == del.SupplierId).FirstOrDefault();
-                var typeSupply = this.db.TypeSuppliers.Where(w => w.TypeSupplierId == supplier.TypeSupplierId).FirstOrDefault();
-                var schoolNumber = this.db.Schools.Where(w => w.SchoolId == del.SchoolId).FirstOrDefault();
-                var assemb = this.db.Assemblies.Where(w => w.AssemblyId == del.AssemblyId).FirstOrDefault();
-                var statuse = this.db.Statuses.Where(w => w.StatusId == del.StatusId).FirstOrDefault();
-
-                Panel supplierPanel = new Panel
-                {
-                    Size = new System.Drawing.Size(770, 140),
-                    Location = new System.Drawing.Point(15, yOffset),
-                    BorderStyle = BorderStyle.FixedSingle,
-                    BackColor = Color.White,
-                    Tag = $"{del.DeliveryId},{supplier.SupplierId},{assemb.AssemblyId},{schoolNumber.SchoolId},{statuse.StatusId}"
-                };
-                Panel rightPanel = new Panel
-                {
-                    Size = new System.Drawing.Size(250, 140),
-                    Dock = DockStyle.Right,
-                    //BorderStyle = BorderStyle.FixedSingle
-                };
-                supplierPanel.MouseDown += panelLabel_MouseDown;
-                //supplierPanel.MouseDown += panelLabel_MouseDown;
-                Label supplierLabel = new Label
-                {
-                    AutoSize = false,
-                    Size = new System.Drawing.Size(250, 30),
-                    Dock = DockStyle.Bottom,
-                    Text = $" Поставщик: {typeSupply.TypeSupplierName} {supplier.SupplierName}",
-                    TextAlign = ContentAlignment.BottomRight
-                };
-                supplierLabel.Font = new Font("Arial", 12, FontStyle.Regular);
-
-                Label statuseLabel = new Label
-                {
-                    AutoSize = false,
-                    Size = new System.Drawing.Size(250, 30),
-                    Dock = DockStyle.Top,
-                    Text = $" Статус:{statuse.StatusName}",
-                    TextAlign = ContentAlignment.BottomRight
-                };
-                statuseLabel.Font = new Font("Arial", 12, FontStyle.Regular);
-
-                Label assemblyLabel = new Label
-                {
-                    AutoSize = false,
-                    Dock = DockStyle.Left,
-                    Size = new System.Drawing.Size(250, 140),
-                    TextAlign = ContentAlignment.MiddleLeft,
-                    //BorderStyle = BorderStyle.FixedSingle,
-                    Text = $"Заказ: \nКомпьютер\nСерийный номер {del.AssemblyId}\n{schoolNumber.SchoolName}\n{del.DeliveryDate}"
-                };
-
-                //----------------
-                Button threeDotsButton = new Button
-                {
-                    Text = "...",
-                    Size = new System.Drawing.Size(30, 30),
-                    Dock = DockStyle.Right,
-                    Location = new System.Drawing.Point(supplierPanel.Width - 40, 5) // Позиция в правом верхнем углу
-                };
-                threeDotsButton.Click += (s, e) => ShowContextMenu(threeDotsButton, del);
-                threeDotsButton.Click += panelLabel_MouseDown;
-                threeDotsButton.Tag = supplierPanel;
-                //-----------------
-                assemblyLabel.Font = new Font("Arial", 12, FontStyle.Regular);
-
-                supplierPanel.Controls.Add(assemblyLabel);
-                rightPanel.Controls.Add(supplierLabel);
-                rightPanel.Controls.Add(statuseLabel);
-                //rightPanel.Controls.Add(threeDotsButton);
-                supplierPanel.Controls.Add(rightPanel);
-                //----
-
-                supplierPanel.Controls.Add(threeDotsButton); // Добавляем кнопку на панель
-                //----
-                this.Controls.Add(supplierPanel);
-                yOffset += supplierPanel.Height + 30;
+                int height = GenerateDeliveries(del, yOffset);
+                yOffset += height + 30;
             }
         }
+        private int GenerateDeliveries(Delivery del, int yOffset)
+        {
+            var supplier = this.db.Suppliers.Where(w => w.SupplierId == del.SupplierId).FirstOrDefault();
+            var typeSupply = this.db.TypeSuppliers.Where(w => w.TypeSupplierId == supplier.TypeSupplierId).FirstOrDefault();
+            var schoolNumber = this.db.Schools.Where(w => w.SchoolId == del.SchoolId).FirstOrDefault();
+            var assemb = this.db.Assemblies.Where(w => w.AssemblyId == del.AssemblyId).FirstOrDefault();
+            var statuse = this.db.Statuses.Where(w => w.StatusId == del.StatusId).FirstOrDefault();
+
+            Panel supplierPanel = new Panel
+            {
+                Size = new System.Drawing.Size(770, 140),
+                Location = new System.Drawing.Point(15, yOffset),
+                BorderStyle = BorderStyle.FixedSingle,
+                BackColor = Color.White,
+                Tag = $"{del.DeliveryId},{supplier.SupplierId},{assemb.AssemblyId},{schoolNumber.SchoolId},{statuse.StatusId}"
+            };
+            Panel rightPanel = new Panel
+            {
+                Size = new System.Drawing.Size(250, 140),
+                Dock = DockStyle.Right,
+                //BorderStyle = BorderStyle.FixedSingle
+            };
+            supplierPanel.MouseDown += panelLabel_MouseDown;
+            //supplierPanel.MouseDown += panelLabel_MouseDown;
+            Label supplierLabel = new Label
+            {
+                AutoSize = false,
+                Size = new System.Drawing.Size(250, 30),
+                Dock = DockStyle.Bottom,
+                Text = $" Поставщик: {typeSupply.TypeSupplierName} {supplier.SupplierName}",
+                TextAlign = ContentAlignment.BottomRight
+            };
+            supplierLabel.Font = new Font("Arial", 12, FontStyle.Regular);
+
+            Label statuseLabel = new Label
+            {
+                AutoSize = false,
+                Size = new System.Drawing.Size(250, 30),
+                Dock = DockStyle.Top,
+                Text = $" Статус:{statuse.StatusName}",
+                TextAlign = ContentAlignment.BottomRight
+            };
+            statuseLabel.Font = new Font("Arial", 12, FontStyle.Regular);
+
+            Label assemblyLabel = new Label
+            {
+                AutoSize = false,
+                Dock = DockStyle.Left,
+                Size = new System.Drawing.Size(250, 140),
+                TextAlign = ContentAlignment.MiddleLeft,
+                //BorderStyle = BorderStyle.FixedSingle,
+                Text = $"Заказ: \nКомпьютер\nСерийный номер {del.AssemblyId}\n{schoolNumber.SchoolName}\n{del.DeliveryDate}"
+            };
+
+            //----------------
+            Button threeDotsButton = new Button
+            {
+                Text = "...",
+                Size = new System.Drawing.Size(30, 30),
+                Dock = DockStyle.Right,
+                Location = new System.Drawing.Point(supplierPanel.Width - 40, 5) // Позиция в правом верхнем углу
+            };
+            threeDotsButton.Click += (s, e) => ShowContextMenu(threeDotsButton, del);
+            threeDotsButton.Click += panelLabel_MouseDown;
+            threeDotsButton.Tag = supplierPanel;
+            //-----------------
+            assemblyLabel.Font = new Font("Arial", 12, FontStyle.Regular);
+
+            supplierPanel.Controls.Add(assemblyLabel);
+            rightPanel.Controls.Add(supplierLabel);
+            rightPanel.Controls.Add(statuseLabel);
+            //rightPanel.Controls.Add(threeDotsButton);
+            supplierPanel.Controls.Add(rightPanel);
+            //----
+
+            supplierPanel.Controls.Add(threeDotsButton); // Добавляем кнопку на панель
+                                                         //----
+            this.Controls.Add(supplierPanel);
+            return supplierPanel.Height;
+        }
+        
 
         private void SortPanels(int sortOption)
         {
             // Удаляем все панели перед сортировкой
             this.Controls.Clear();
             InitializeSortingControls(); // Снова добавляем элементы управления для сортировки
-            var deliveries = db.Deliveries.ToList();
+            this.db = new SchollContext();
+            List<Delivery> deliveries;
+
+            if (LoginForm.role == "3")
+            {
+                deliveries = db.Deliveries.Include(i => i.Supplier).Where(w => w.Supplier.UserId == LoginForm.user).ToList();
+            }
+            else
+            {
+                deliveries = db.Deliveries.ToList();
+            }
+             
             // Сортировка по выбранному критерию
             if (sortOption == 0) // Сортировка по дате доставки
             {
@@ -313,7 +276,6 @@ namespace School
             }
             // Генерируем панели после сортировки
             InitializeCustomControls();
-            InitializeSortingControls();
             GeneratePanel(deliveries);
         }
         
@@ -586,7 +548,17 @@ namespace School
         }
         public void MenuShowAssembly_Click(object sender, EventArgs e)
         {
+            Panel clickedPanel = contextMenuStrip.Tag as Panel; // Получаем панель из Tag
+            if (clickedPanel != null)
+            {
+                string splits = (string)clickedPanel.Tag;
+                string[] Ids = splits.Split(",", StringSplitOptions.RemoveEmptyEntries);
 
+                int assemblyId = Int32.Parse(Ids[2]);
+
+                FormAsseblies assemblies = new FormAsseblies(assemblyId);
+                assemblies.Show();
+            }
         }
 
         public void MenuEditStatuse_Click(object sender, EventArgs e)

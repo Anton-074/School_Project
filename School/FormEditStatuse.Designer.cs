@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             panel1 = new Panel();
+            label3 = new Label();
             panelBut = new Panel();
             buttonSave = new Button();
             buttonCancel = new Button();
@@ -40,21 +41,32 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(label3);
             panel1.Controls.Add(panelBut);
             panel1.Controls.Add(label);
             panel1.Controls.Add(comboBoxStatuse);
             panel1.Dock = DockStyle.Fill;
             panel1.Location = new Point(0, 0);
             panel1.Name = "panel1";
-            panel1.Size = new Size(539, 176);
+            panel1.Size = new Size(539, 256);
             panel1.TabIndex = 15;
+            // 
+            // label3
+            // 
+            label3.Dock = DockStyle.Top;
+            label3.Location = new Point(0, 0);
+            label3.Name = "label3";
+            label3.Size = new Size(539, 65);
+            label3.TabIndex = 19;
+            label3.Text = "labelTop";
+            label3.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // panelBut
             // 
             panelBut.Controls.Add(buttonSave);
             panelBut.Controls.Add(buttonCancel);
             panelBut.Dock = DockStyle.Bottom;
-            panelBut.Location = new Point(0, 101);
+            panelBut.Location = new Point(0, 181);
             panelBut.Name = "panelBut";
             panelBut.Size = new Size(539, 75);
             panelBut.TabIndex = 18;
@@ -84,7 +96,7 @@
             // label
             // 
             label.Font = new Font("Microsoft Sans Serif", 12F);
-            label.Location = new Point(37, 18);
+            label.Location = new Point(37, 77);
             label.Name = "label";
             label.Size = new Size(487, 28);
             label.TabIndex = 12;
@@ -95,7 +107,7 @@
             comboBoxStatuse.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxStatuse.Font = new Font("Microsoft Sans Serif", 12F);
             comboBoxStatuse.FormattingEnabled = true;
-            comboBoxStatuse.Location = new Point(37, 48);
+            comboBoxStatuse.Location = new Point(37, 107);
             comboBoxStatuse.Name = "comboBoxStatuse";
             comboBoxStatuse.Size = new Size(487, 28);
             comboBoxStatuse.TabIndex = 13;
@@ -104,7 +116,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(539, 176);
+            ClientSize = new Size(539, 256);
             Controls.Add(panel1);
             Name = "FormEditStatuse";
             Text = "FormEditStatuse";
@@ -125,5 +137,6 @@
         public ComboBox comboBoxAssembly;
         public Label label;
         public ComboBox comboBoxStatuse;
+        private Label label3;
     }
 }

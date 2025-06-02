@@ -1,6 +1,6 @@
 ﻿namespace School
 {
-    partial class FormSupplier
+    partial class FormAsseblies
     {
         /// <summary>
         /// Required designer variable.
@@ -28,14 +28,22 @@
         /// </summary>
         private void InitializeComponent()
         {
+            panel1 = new Panel();
             labelName = new Label();
             labelInfo = new Label();
             buttonCancel = new Button();
-            panelBut = new Panel();
-            panel1 = new Panel();
-            panelBut.SuspendLayout();
             panel1.SuspendLayout();
             SuspendLayout();
+            // 
+            // panel1
+            // 
+            panel1.Controls.Add(labelName);
+            panel1.Controls.Add(labelInfo);
+            panel1.Dock = DockStyle.Top;
+            panel1.Location = new Point(10, 10);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(717, 267);
+            panel1.TabIndex = 21;
             // 
             // labelName
             // 
@@ -43,9 +51,9 @@
             labelName.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point, 204);
             labelName.Location = new Point(0, 0);
             labelName.Name = "labelName";
-            labelName.Size = new Size(463, 65);
+            labelName.Size = new Size(717, 65);
             labelName.TabIndex = 0;
-            labelName.Text = "Поставщик: ";
+            labelName.Text = "Сборка:";
             labelName.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // labelInfo
@@ -54,63 +62,42 @@
             labelInfo.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 204);
             labelInfo.Location = new Point(0, 65);
             labelInfo.Name = "labelInfo";
-            labelInfo.Size = new Size(463, 206);
+            labelInfo.Size = new Size(717, 202);
             labelInfo.TabIndex = 1;
             labelInfo.Text = "Инфа";
             // 
             // buttonCancel
             // 
-            buttonCancel.Dock = DockStyle.Fill;
+            buttonCancel.Dock = DockStyle.Bottom;
             buttonCancel.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            buttonCancel.Location = new Point(0, 0);
+            buttonCancel.Location = new Point(10, 275);
             buttonCancel.Name = "buttonCancel";
-            buttonCancel.Size = new Size(463, 75);
-            buttonCancel.TabIndex = 0;
+            buttonCancel.Size = new Size(717, 75);
+            buttonCancel.TabIndex = 22;
             buttonCancel.Text = "Назад";
             buttonCancel.UseVisualStyleBackColor = true;
             buttonCancel.Click += buttonCancel_Click;
             // 
-            // panelBut
-            // 
-            panelBut.Controls.Add(buttonCancel);
-            panelBut.Dock = DockStyle.Bottom;
-            panelBut.Location = new Point(10, 281);
-            panelBut.Name = "panelBut";
-            panelBut.Size = new Size(463, 75);
-            panelBut.TabIndex = 19;
-            // 
-            // panel1
-            // 
-            panel1.Controls.Add(labelName);
-            panel1.Controls.Add(labelInfo);
-            panel1.Dock = DockStyle.Fill;
-            panel1.Location = new Point(10, 10);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(463, 271);
-            panel1.TabIndex = 20;
-            // 
-            // FormSupplier
+            // FormAsseblies
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(483, 366);
+            ClientSize = new Size(737, 360);
+            Controls.Add(buttonCancel);
             Controls.Add(panel1);
-            Controls.Add(panelBut);
-            Name = "FormSupplier";
+            Name = "FormAsseblies";
             Padding = new Padding(10);
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "FormSupplier";
-            panelBut.ResumeLayout(false);
+            Text = "FormAssevblies";
             panel1.ResumeLayout(false);
             ResumeLayout(false);
         }
 
         #endregion
 
+        private Panel panel1;
         private Label labelName;
         private Label labelInfo;
         private Button buttonCancel;
-        private Panel panelBut;
-        private Panel panel1;
     }
 }

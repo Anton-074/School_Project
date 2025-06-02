@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.DataFormats;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace School
 {
@@ -23,12 +24,16 @@ namespace School
         private TextBox usernameTextBox;
         private TextBox passwordTextBox;
         private Button loginButton;
+        private Button closeButton;
 
         public static string role = null;
         public static int user = -1;
         public LoginForm()
         {
             // Настройки формы
+            this.FormBorderStyle = FormBorderStyle.FixedDialog; // Убираем возможность изменения размера
+            this.MaximizeBox = false; // Убираем кнопку разворачивания
+            this.FormClosing += new FormClosingEventHandler(this.Form1_FormClosing);
             this.Text = "Авторизация";
             this.ClientSize = new Size(350, 250);
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -43,6 +48,19 @@ namespace School
             titleLabel.AutoSize = true;
             titleLabel.Location = new Point((this.ClientSize.Width - titleLabel.Width) / 2, 20);
             titleLabel.TextAlign = ContentAlignment.MiddleCenter;
+
+            /*closeButton = new Button();
+            //closeButton.Text = "✖"; // Символ крестика
+            closeButton.Text = "X";
+            closeButton.Size = new Size(40, 40);
+             // Расположение справа от заголовка
+            closeButton.BackColor = Color.Transparent;
+            closeButton.ForeColor = Color.White;
+            closeButton.FlatStyle = FlatStyle.Flat;
+            closeButton.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
+            closeButton.Click += CloseButton_Click; // Подписка на событие клика*/
+
+
             // Метка "Имя пользователя"
             usernameLabel = new Label();
             usernameLabel.Text = "Имя пользователя:";
@@ -84,6 +102,7 @@ namespace School
 
             // Добавление элементов на форму
             Controls.Add(titleLabel);
+            Controls.Add(closeButton);
             Controls.Add(usernameLabel);
             Controls.Add(usernameTextBox);
             Controls.Add(passwordLabel);
@@ -92,7 +111,14 @@ namespace School
 
             // Центрирование заголовка после добавления на форму
             titleLabel.Left = (this.ClientSize.Width - titleLabel.Width) / 2;
+            //closeButton.Location = new Point(titleLabel.Right + 30, 20);
         }
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // Завершение работы приложения
+            Application.Exit();
+        }
+
         private void LoginButton_Click(object sender, EventArgs e)
         {
             this.db = new SchollContext();

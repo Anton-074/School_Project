@@ -40,6 +40,7 @@
             label1 = new Label();
             comboBoxAssembly = new ComboBox();
             errorProvider = new ErrorProvider(components);
+            label3 = new Label();
             panel1.SuspendLayout();
             panelBut.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)errorProvider).BeginInit();
@@ -50,7 +51,7 @@
             comboBoxSupply.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxSupply.Font = new Font("Microsoft Sans Serif", 12F);
             comboBoxSupply.FormattingEnabled = true;
-            comboBoxSupply.Location = new Point(37, 48);
+            comboBoxSupply.Location = new Point(37, 118);
             comboBoxSupply.Name = "comboBoxSupply";
             comboBoxSupply.Size = new Size(487, 28);
             comboBoxSupply.TabIndex = 13;
@@ -60,7 +61,7 @@
             // label
             // 
             label.Font = new Font("Microsoft Sans Serif", 12F);
-            label.Location = new Point(37, 18);
+            label.Location = new Point(37, 88);
             label.Name = "label";
             label.Size = new Size(487, 28);
             label.TabIndex = 12;
@@ -68,6 +69,7 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(label3);
             panel1.Controls.Add(panelBut);
             panel1.Controls.Add(label2);
             panel1.Controls.Add(comboBoxSchool);
@@ -78,7 +80,7 @@
             panel1.Dock = DockStyle.Fill;
             panel1.Location = new Point(0, 0);
             panel1.Name = "panel1";
-            panel1.Size = new Size(561, 386);
+            panel1.Size = new Size(561, 445);
             panel1.TabIndex = 14;
             // 
             // panelBut
@@ -86,7 +88,7 @@
             panelBut.Controls.Add(buttonSave);
             panelBut.Controls.Add(buttonCancel);
             panelBut.Dock = DockStyle.Bottom;
-            panelBut.Location = new Point(0, 311);
+            panelBut.Location = new Point(0, 370);
             panelBut.Name = "panelBut";
             panelBut.Size = new Size(561, 75);
             panelBut.TabIndex = 18;
@@ -116,7 +118,7 @@
             // label2
             // 
             label2.Font = new Font("Microsoft Sans Serif", 12F);
-            label2.Location = new Point(37, 204);
+            label2.Location = new Point(37, 274);
             label2.Name = "label2";
             label2.Size = new Size(487, 28);
             label2.TabIndex = 16;
@@ -127,7 +129,7 @@
             comboBoxSchool.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxSchool.Font = new Font("Microsoft Sans Serif", 12F);
             comboBoxSchool.FormattingEnabled = true;
-            comboBoxSchool.Location = new Point(37, 234);
+            comboBoxSchool.Location = new Point(37, 304);
             comboBoxSchool.Name = "comboBoxSchool";
             comboBoxSchool.Size = new Size(487, 28);
             comboBoxSchool.TabIndex = 17;
@@ -137,7 +139,7 @@
             // label1
             // 
             label1.Font = new Font("Microsoft Sans Serif", 12F);
-            label1.Location = new Point(37, 109);
+            label1.Location = new Point(37, 179);
             label1.Name = "label1";
             label1.Size = new Size(487, 28);
             label1.TabIndex = 14;
@@ -148,7 +150,7 @@
             comboBoxAssembly.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxAssembly.Font = new Font("Microsoft Sans Serif", 12F);
             comboBoxAssembly.FormattingEnabled = true;
-            comboBoxAssembly.Location = new Point(37, 139);
+            comboBoxAssembly.Location = new Point(37, 209);
             comboBoxAssembly.Name = "comboBoxAssembly";
             comboBoxAssembly.Size = new Size(487, 28);
             comboBoxAssembly.TabIndex = 15;
@@ -159,11 +161,21 @@
             // 
             errorProvider.ContainerControl = this;
             // 
+            // label3
+            // 
+            label3.Dock = DockStyle.Top;
+            label3.Location = new Point(0, 0);
+            label3.Name = "label3";
+            label3.Size = new Size(561, 70);
+            label3.TabIndex = 19;
+            label3.Text = "label3";
+            label3.TextAlign = ContentAlignment.MiddleCenter;
+            // 
             // FormEditDelivery
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(561, 386);
+            ClientSize = new Size(561, 445);
             Controls.Add(panel1);
             Name = "FormEditDelivery";
             StartPosition = FormStartPosition.CenterScreen;
@@ -188,5 +200,6 @@
         private Panel panelBut;
         private Button buttonSave;
         private Button buttonCancel;
+        private Label label3;
     }
 }
